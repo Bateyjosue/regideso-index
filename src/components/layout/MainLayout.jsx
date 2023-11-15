@@ -1,5 +1,6 @@
 import { Outlet } from "react-router-dom"
 import SideBar from "../Navigation/SideBar"
+import Profile from "../navigation/Profile"
 
 function MainLayout() {
   return (
@@ -8,6 +9,7 @@ function MainLayout() {
         <SideBar/>
       </header>
       <main className="w-11/12">
+        <Profile/>
         <Outlet className="w-full"/>
       </main>
     </div>

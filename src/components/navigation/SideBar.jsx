@@ -6,7 +6,7 @@ import { HiArrowSmRight, HiChartPie, HiUser, HiDocumentReport, HiBell } from 're
 
 function SideBar() {
   return (
-    <Sidebar aria-label="Sidebar with logo branding example" className='-p-2 flex flex-col '>
+    <Sidebar aria-label="Sidebar with logo branding example" className='-p-2 flex flex-col'>
       <Sidebar.Logo href="#" img="/src/assets/logo.png" imgAlt="" className="flex justify-center w-full h-1/5" />
       <Sidebar.Items className='my-4 flex flex-col h-4/5'>
         <Sidebar.ItemGroup className='gap-2 h-2/6'>
