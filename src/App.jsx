@@ -13,6 +13,10 @@ function App() {
         
       ]
     },
+    {
+      path: '/dashboard',
+      // element: <RegisterPage />
+    },
   ])
 
   return (
