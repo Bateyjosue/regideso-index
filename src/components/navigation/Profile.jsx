@@ -2,6 +2,7 @@
 
 import { Dropdown } from 'flowbite-react';
 import Avatar from './Avatar';
+import { Link } from 'react-router-dom';
 
 function Profile() {
   return (
@@ -37,7 +38,9 @@ function Profile() {
           <Dropdown.Item>Dashboard</Dropdown.Item>
           <Dropdown.Item>Settings</Dropdown.Item>
           <Dropdown.Divider />
-          <Dropdown.Item>Sign out</Dropdown.Item>
+        <Dropdown.Item>
+          <Link to="/login">Sign out</Link>
+          </Dropdown.Item>
       </Dropdown>
     </div>
   );
