@@ -3,7 +3,7 @@ import MainLayout from "./components/layout/MainLayout"
 import ErrorPage from "./components/Error/ErrorPage"
 import LoginPage from "./components/auth/LoginPage"
 import RegisterPage from "./components/auth/RegisterPage"
-import IndexClient from "./components/clients/IndexClient"
+import IndexClient, {loader as indexLoader} from "./components/clients/IndexClient"
 
 function App() {
 
@@ -19,7 +19,8 @@ function App() {
         },
         {
           path: 'index-client',
-          element: <IndexClient />
+          element: <IndexClient />,
+          loader: indexLoader
         }
       ]
     },
