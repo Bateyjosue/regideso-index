@@ -4,6 +4,7 @@ import ErrorPage from "./components/Error/ErrorPage"
 import LoginPage from "./components/auth/LoginPage"
 import RegisterPage from "./components/auth/RegisterPage"
 import IndexClient, {loader as indexLoader} from "./components/clients/IndexClient"
+import Fuite, {loader as leakesLoader} from "./components/clients/Fuite"
 
 function App() {
 
@@ -21,7 +22,12 @@ function App() {
           path: 'index-client',
           element: <IndexClient />,
           loader: indexLoader
-        }
+        },
+        {
+          path: 'fuites',
+          element: <Fuite />,
+          loader: leakesLoader
+        },
       ]
     },
     {
