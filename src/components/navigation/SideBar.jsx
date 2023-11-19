@@ -25,7 +25,7 @@ function SideBar() {
           <Sidebar.Item href="index-client" icon={HiBell} className="gap-4 py-2 justify-start px-12 hover:bg-blue-200 hover:text-white hover:rounded-none">
             Index Clients
           </Sidebar.Item>
-          <Sidebar.Item href="#" icon={HiBell} className="gap-4 py-2 justify-start px-12 hover:bg-blue-200 hover:text-white hover:rounded-none">
+          <Sidebar.Item href="fuites" icon={HiBell} className="gap-4 py-2 justify-start px-12 hover:bg-blue-200 hover:text-white hover:rounded-none">
             Fuites
           </Sidebar.Item>
           <Sidebar.Item href="#" icon={HiDocumentReport} className="gap-4 py-2  justify-start px-12 hover:bg-blue-200 hover:text-white hover:rounded-none">
