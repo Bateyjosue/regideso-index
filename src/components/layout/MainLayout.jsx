@@ -1,8 +1,13 @@
-import { Outlet } from "react-router-dom"
+import { Outlet, useNavigate } from "react-router-dom"
 import SideBar from "../Navigation/SideBar"
 import Profile from "../navigation/Profile"
+import { useAuth } from "../auth/LoginPage"
+
 
 function MainLayout() {
+  const navigate = useNavigate()
+  const [logged] = useAuth()
+  if(!logged) return navigate('/', { replace: true })
   return (
     <div className="flex h-screen">
       <header className="w-3/12 bg-gray-300/20">

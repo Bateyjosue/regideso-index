@@ -10,7 +10,6 @@ export async function  loader() {
     const subscribeData = await subscribe.json()
 
     const indexResponse = await fetch(`${baseUrl}index-samples?params={%22page%22:%221%22,%20%22limit%22:%22100%22}`)
-
     const indexData = await indexResponse.json()
 
     const subIndex = indexData.indexSamplesResponse.rows.map((index) => {
@@ -27,34 +26,33 @@ function IndexClient() {
     const tableRef = useRef(null)
     const indexInfo =  useLoaderData()
 
-  const { onDownload } = useDownloadExcel({
-      currentTableRef: tableRef.current,
-      filename: 'Users table',
-      sheet: 'Users'
-  })
-    
-    console.log(indexInfo);
-    
+const { onDownload } = useDownloadExcel({
+    currentTableRef: tableRef.current,
+    filename: 'Users table',
+    sheet: 'Users'
+})
+
   return (
-      <><button onClick={onDownload} className='my-12 bg-green-600 px-4 text-white rounded-full'> Export excel </button><div className="relative overflow-x-auto shadow-md sm:rounded-lg mx-12 ">
+      <>
+        <button onClick={onDownload} className='my-12 bg-green-600 px-4 text-white rounded-full'> Export excel </button><div className="relative overflow-x-auto shadow-md sm:rounded-lg mx-12 ">
           <table ref={tableRef} className="w-full text-sm text-left rtl:text-right text-gray-500">
-              <thead className="text-xs text-gray-700 uppercase bg-gray-50 ">
-                  <tr>
-                      <th scope="col" className="px-6 py-3">
-                          Index Number
-                      </th>
-                      <th scope="col" className="px-6 py-3">
-                          Abonne
-                      </th>
-                      <th scope="col" className="px-6 py-3">
-                          M3 Consumed
-                      </th>
-                      <th scope="col" className="px-6 py-3">
-                          Pour le Mois de?
-                      </th>
-                  </tr>
-              </thead>
-              <tbody>
+            <thead className="text-xs text-gray-700 uppercase bg-gray-50 ">
+            <tr>
+                <th scope="col" className="px-6 py-3">
+                    Index Number
+                </th>
+                <th scope="col" className="px-6 py-3">
+                    Abonne
+                </th>
+                <th scope="col" className="px-6 py-3">
+                    M3 Consumed
+                </th>
+                <th scope="col" className="px-6 py-3">
+                    Pour le Mois de?
+                </th>
+            </tr>
+            </thead>
+            <tbody>
                 { 
                   indexInfo ? (
                     indexInfo.map(index => (
