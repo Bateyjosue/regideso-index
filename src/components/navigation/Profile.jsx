@@ -2,9 +2,10 @@
 
 import { Dropdown } from 'flowbite-react';
 import Avatar from './Avatar';
-import { Link } from 'react-router-dom';
+import { logout } from '../auth/LoginPage';
 
 function Profile() {
+  
   return (
     <div className='h-14 flex justify-end items-center gap-4 text-gray-400 hover:text-gray-800s px-12'>
       <form className="flex items-center">   
@@ -38,8 +39,8 @@ function Profile() {
           <Dropdown.Item>Dashboard</Dropdown.Item>
           <Dropdown.Item>Settings</Dropdown.Item>
           <Dropdown.Divider />
-        <Dropdown.Item>
-          <Link to="/login">Sign out</Link>
+        <Dropdown.Item className='bg-red-500'>
+          <button onClick={()=> logout()}>Sign out</button>
           </Dropdown.Item>
       </Dropdown>
     </div>
