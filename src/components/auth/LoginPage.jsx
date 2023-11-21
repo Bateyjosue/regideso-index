@@ -1,8 +1,9 @@
-import { Link, Navigate } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import Input from "../forms/Input"
 import { useForm } from "react-hook-form"
 import { createAuthProvider } from "react-token-auth"
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const [useAuth, authFetch, login, logout] = createAuthProvider({
     accessTokenKey: 'accessToken',
     onUpdateToken: (token) => fetch('/update-token', {
@@ -14,39 +15,35 @@ export const [useAuth, authFetch, login, logout] = createAuthProvider({
 const baseUrl = 'https://regi-api.bingwainnovationhub.com/v1/'
 
 function LoginPage() {
+  const navigate = useNavigate()
+  
   const {
     register,
     handleSubmit,
     formState: {errors}
   } = useForm()
 
-
-  
-  
   const onSubmit = async data => {
     try {
       const responseLogin = await fetch(`${baseUrl}users/signin`, {
         method: "POST",
         cache: "reload",
+        mode: "cors",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(data)
       },)
       const loginData = await responseLogin.json()
-      if(JSON.stringify(loginData).status != 200)alert(JSON.stringify(loginData))
+      if(JSON.stringify(loginData).status >= 200 && JSON.stringify(loginData).status <= 209)alert(JSON.stringify(loginData))
       login(data)
+      navigate('/', {replace: true})
     }
     catch (error) {
       console.log(error);
     }
     
   }
-
-  console.log('isAuth', useAuth());
-
-  if(useAuth()) return <Navigate to="/" replace />
-
 
   return (
     <main>
