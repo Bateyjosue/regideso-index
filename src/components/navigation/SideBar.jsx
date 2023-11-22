@@ -10,7 +10,7 @@ function SideBar() {
       <Sidebar.Logo href="#" img="/src/assets/logo.png" imgAlt="" className="flex justify-center w-full h-1/5" />
       <Sidebar.Items className='my-4 flex flex-col h-4/5'>
         <Sidebar.ItemGroup className='gap-2 h-2/6'>
-          <Sidebar.Item href="#" icon={HiChartPie} className="gap-4 py-2 justify-start px-12 hover:bg-blue-200 hover:text-white hover:rounded-none">
+          <Sidebar.Item href="/" icon={HiChartPie} className="gap-4 py-2 justify-start px-12 hover:bg-blue-200 hover:text-white hover:rounded-none">
             Dashboard
           </Sidebar.Item>
           <Sidebar.Collapse icon={HiShoppingBag} label="Agents" className="gap-4 py-2 justify-start px-12 hover:bg-blue-200 hover:text-white hover:rounded-none">

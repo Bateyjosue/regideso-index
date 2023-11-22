@@ -1,28 +1,52 @@
-import { useLoaderData} from 'react-router-dom'
+import { useLoaderData } from 'react-router-dom'
+import { Dna } from 'react-loader-spinner'
 
 export async function loader() {
   const baseUrl = 'https://regi-api.bingwainnovationhub.com/v1/'
 
-  const fuiteResponse = await fetch(`${baseUrl}water-leaks?params={"page":"1", "limit":"1000"}`)
-  const fuiteData = await fuiteResponse.json()
+  let dataObj = {
+    error: '',
+    loading: false,
+    data: null
+  }
 
-  const agentResponse = await fetch(`${baseUrl}users?params={"page":"1", "limit":"1000"}`)
-  const agentData = await agentResponse.json()
   
-  const leakAgent = fuiteData.waterLeaksResponse.rows.map(leak => {
-    const agent = agentData.usersResponse.rows.find(agent => agent.id.toLowerCase() === leak.user_id.toLowerCase())
-    return {
-      ...agent,
-      ...leak,
-    }
-  })
+  try {
+    dataObj.loading = true
+    const fuiteResponse = await fetch(`${baseUrl}water-leaks?params={"page":"1", "limit":"1000"}`)
+    const fuiteData = await fuiteResponse.json()
+    const agentResponse = await fetch(`${baseUrl}users?params={"page":"1", "limit":"1000"}`)
+    const agentData = await agentResponse.json()
+    const leakAgent = fuiteData.waterLeaksResponse.rows.map(leak => {
+      const agent = agentData.usersResponse.rows.find(agent => agent.id.toLowerCase() === leak.user_id.toLowerCase())
+      return {
+        ...agent,
+        ...leak,
+      }
+    })
 
-  return leakAgent
+    dataObj = {
+      error: null,
+      loading: false,
+      data: leakAgent
+    }
+
+  }
+  catch (err) {
+    dataObj = {
+      error: err,
+      loading: false,
+      data: []
+    }
+  }
+  
+
+  return dataObj
 }
 
 function Fuite() {
-  const leakes = useLoaderData()
-
+  const { data: leakes } = useLoaderData()
+  
   return (
   <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
       <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
@@ -43,7 +67,8 @@ function Fuite() {
               </tr>
           </thead>
           <tbody>
-            {
+          {
+            leakes.length ? (
               leakes.map(leak => (
                 <tr key={leak.id} className="bg-white border-b  dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
                   <td className="p-4">
@@ -60,6 +85,17 @@ function Fuite() {
                   </td>
               </tr>
               ))
+            )
+              : (
+                <Dna
+                  visible={true}
+                  height="80"
+                  width="80"
+                  ariaLabel="dna-loading"
+                  wrapperStyle={{}}
+                  wrapperClass="dna-wrapper"
+                />
+              )
             }
           </tbody>
       </table>
