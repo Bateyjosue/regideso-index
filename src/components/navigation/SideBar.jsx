@@ -3,11 +3,12 @@
 
 import { Sidebar } from 'flowbite-react';
 import { HiShoppingBag, HiChartPie, HiUser, HiDocumentReport, HiBell } from 'react-icons/hi';
+import IMAGES from '../../assets/images'
 
 function SideBar() {
   return (
     <Sidebar aria-label="Sidebar with logo branding example" className='-p-2 flex flex-col'>
-      <Sidebar.Logo href="#" img="/src/assets/logo.png" imgAlt="" className="flex justify-center w-full h-1/5" />
+      <Sidebar.Logo href="#" img={IMAGES.regideso} imgAlt="" className="flex justify-center w-full h-1/5" />
       <Sidebar.Items className='my-4 flex flex-col h-4/5'>
         <Sidebar.ItemGroup className='gap-2 h-2/6'>
           <Sidebar.Item href="/" icon={HiChartPie} className="gap-4 py-2 justify-start px-12 hover:bg-blue-200 hover:text-white hover:rounded-none">
