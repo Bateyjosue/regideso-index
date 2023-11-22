@@ -20,7 +20,7 @@ function SideBar() {
             <Sidebar.Item href="#"></Sidebar.Item>
           </Sidebar.Collapse>
           <Sidebar.Collapse href="#" icon={HiUser} label="Abonnes" className="gap-4 py-2 justify-start px-12 hover:bg-blue-200 hover:text-white hover:rounded-none">
-            <Sidebar.Item href="#">List des Abonnes</Sidebar.Item>
+            <Sidebar.Item href="subscriber">List des Abonnes</Sidebar.Item>
             <Sidebar.Item href="#">Ajouter un Abonne</Sidebar.Item>
           </Sidebar.Collapse>
           <Sidebar.Item href="index-client" icon={HiBell} className="gap-4 py-2 justify-start px-12 hover:bg-blue-200 hover:text-white hover:rounded-none">
