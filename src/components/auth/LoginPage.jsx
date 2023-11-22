@@ -2,6 +2,7 @@ import { Link, useNavigate } from "react-router-dom"
 import Input from "../forms/Input"
 import { useForm } from "react-hook-form"
 import { createAuthProvider } from "react-token-auth"
+import IMAGES from "../../assets/images"
 
 // eslint-disable-next-line react-refresh/only-export-components
 export const [useAuth, authFetch, login, logout] = createAuthProvider({
@@ -49,7 +50,7 @@ function LoginPage() {
     <main>
       <section className="w-full h-screen grid grid-cols-2 place-content-center place-items-center">
         <article className="">
-          <img src="/src/assets/bg-1.webp" alt="" className="w-full h-screen " />
+          <img src={IMAGES.logo} alt="" className="w-full h-screen " />
         </article>
         <article className="">
           <h1 className="text-3xl font-semibold text-center">
