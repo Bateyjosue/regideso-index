@@ -1,35 +1,42 @@
 import { useLoaderData } from 'react-router-dom'
+import { fetcher } from '../../data/api'
 // import { Suspense } from 'react'
+import { Dna } from 'react-loader-spinner'
+import useSWR from 'swr'
+
+
+const url = 'https://regi-api.bingwainnovationhub.com/v1/subscribers?params={"page":"1", "limit":"100"}'
 
 export async function loader() {
-  const baseUrl = 'https://regi-api.bingwainnovationhub.com/v1/'
-  const subscriberResponse = await fetch(`${baseUrl}subscribers?params={"page":"1", "limit":"100"}`)
-  const subscriberData = await subscriberResponse.json()
-  // return defer({
-  //   subscriber: subscriberData.subscribersResponse.rows
-  // })
+  // const baseUrl = 'https://regi-api.bingwainnovationhub.com/v1/'
+  // const subscriberResponse = await fetch(`${baseUrl}subscribers?params={"page":"1", "limit":"100"}`)
+  // const subscriberData = await subscriberResponse.json()
+  // // return defer({
+  // //   subscriber: subscriberData.subscribersResponse.rows
+  // // })
 
-  return subscriberData.subscribersResponse.rows
+  // return subscriberData.subscribersResponse.rows
 }
 function Subscribers() {
-  const subscriber  = useLoaderData()
+  // const subscriber = useLoaderData()
+
+  const { data, error, isLoading } = useSWR(url, fetcher)
+
+  if (isLoading) {
+    return <Dna
+      visible={true}
+      height="80"
+      width="80"
+      ariaLabel="dna-loading"
+      wrapperStyle={{}}
+      wrapperClass="dna-wrapper"
+    />
+  }
+  if (error) return <div>Failed to load...:: {error?.message}</div>
+
+  const subscriber = data.subscribersResponse.rows
   
   return (
-  //   <Suspense fallback={<>Loading...</>} errorElement={<>An Error has occured</>}>
-  //     <Await resolve={subscriber}>
-  //       {
-  //         (sub) => {
-  //           sub.map(su => (
-  //             <div key={su.id} className='border-20 bg-red-500 mt-30'>
-  //               <span>{su.full_name}</span>
-  //               <span>{su.telephone}</span>
-  //               <span>{su.physic_address}</span>
-  //             </div>
-  //           ))
-  //         }
-  //       }
-    //   </Await>
-    // </Suspense >
     <main>
       <section>
         <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
@@ -71,7 +78,7 @@ function Subscribers() {
               ))
             )
               : (
-                <>Loading</>
+                <>No data available at the moment</>
               )
             }
           </tbody>
