@@ -39,6 +39,12 @@ const { onDownload } = useDownloadExcel({
             <thead className="text-xs text-gray-700 uppercase bg-gray-50 ">
             <tr>
                 <th scope="col" className="px-6 py-3">
+                    Tournee
+                </th>
+                <th scope="col" className="px-6 py-3">
+                    Reference PDI
+                </th>
+                <th scope="col" className="px-6 py-3">
                     Index Number
                 </th>
                 <th scope="col" className="px-6 py-3">
@@ -59,6 +65,11 @@ const { onDownload } = useDownloadExcel({
                       <tr
                         key={index.id}
                         className="border-b dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                        
+                            <td>
+                                ODmfmf
+                        </td>
+                        <td>ODKFNm</td>
                         <td scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowra">
                             {index.id}
                         </td>

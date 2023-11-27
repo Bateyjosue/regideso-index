@@ -10,7 +10,7 @@ export const [useAuth, authFetch, login, logout] = createAuthProvider({
     onUpdateToken: (token) => fetch('/update-token', {
       method: 'POST',
       body: token.loginResponse.refeshToken
-    }).then((response) => response.json())
+    }).then((response) => response.json()).then(data => console.log(data))
   })
 
 const baseUrl = 'https://regi-api.bingwainnovationhub.com/v1/'
@@ -38,6 +38,9 @@ function LoginPage() {
       const loginData = await responseLogin.json()
       if(JSON.stringify(loginData).status >= 200 && JSON.stringify(loginData).status <= 209)alert(JSON.stringify(loginData))
       login(data)
+      localStorage.setItem('access_token', loginData.loginResponse.accessToken)
+      
+
       navigate('/', {replace: true})
     }
     catch (error) {
@@ -90,3 +93,11 @@ function LoginPage() {
 }
 
 export default LoginPage
+
+
+// {
+//     "identification_code":"ABONE00001",
+//     "full_name":"batey ngangala",
+//     "telephone":"+243998877654",
+//     "physic_address":"kigali city"
+// }

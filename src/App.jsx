@@ -6,7 +6,10 @@ import RegisterPage from "./components/auth/RegisterPage"
 import IndexClient, {loader as indexLoader} from "./components/clients/IndexClient"
 import Fuite, {loader as leakesLoader} from "./components/clients/Fuite"
 import Dashboard, {loader} from "./components/clients/Dashboard"
-import Subscribers, {loader as subLoader} from "./components/clients/Subscribers"
+import Subscribers from "./components/clients/Subscribers"
+import AddSubscriber from "./components/clients/AddSubscriber"
+
+import { Toaster } from 'react-hot-toast';
 
 function App() {
 
@@ -18,7 +21,8 @@ function App() {
             <Route index element={<Dashboard />} loader={loader} />
             <Route path="index-client" element={<IndexClient />} loader={indexLoader}/>
             <Route path="fuites" element={<Fuite />} loader={leakesLoader}/>
-            <Route path="subscriber" element={<Subscribers />} loader={subLoader}/>
+            <Route path="subscriber" element={<Subscribers />}/>
+            <Route path="new-subscriber" element={<AddSubscriber />}/>
           </Route>
         </Route>
       <Route path="/register" element={<RegisterPage />}></Route>
@@ -30,6 +34,7 @@ function App() {
 
   return (
     <>
+      <Toaster/>
       <RouterProvider router={router} />
     </>
   )

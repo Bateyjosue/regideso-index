@@ -1,4 +1,3 @@
-import { useLoaderData } from 'react-router-dom'
 import { fetcher } from '../../data/api'
 // import { Suspense } from 'react'
 import { Dna } from 'react-loader-spinner'
@@ -7,19 +6,7 @@ import useSWR from 'swr'
 
 const url = 'https://regi-api.bingwainnovationhub.com/v1/subscribers?params={"page":"1", "limit":"100"}'
 
-export async function loader() {
-  // const baseUrl = 'https://regi-api.bingwainnovationhub.com/v1/'
-  // const subscriberResponse = await fetch(`${baseUrl}subscribers?params={"page":"1", "limit":"100"}`)
-  // const subscriberData = await subscriberResponse.json()
-  // // return defer({
-  // //   subscriber: subscriberData.subscribersResponse.rows
-  // // })
-
-  // return subscriberData.subscribersResponse.rows
-}
 function Subscribers() {
-  // const subscriber = useLoaderData()
-
   const { data, error, isLoading } = useSWR(url, fetcher)
 
   if (isLoading) {
