@@ -10,7 +10,8 @@ function MainLayout() {
   
   return (
     <div className="flex h-screen overflow-hidden">
-      <header className="w-3/12 bg-gray-300/20">
+      <header
+        className="w-3/10 bg-gray-300/20">
         <SideBar/>
       </header>
       <main className="w-11/12 overflow-y-scroll">

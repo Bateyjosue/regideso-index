@@ -16,14 +16,12 @@ function App() {
   const router = createBrowserRouter(
     createRoutesFromElements(
       <Route>
-        <Route errorElement={<ErrorPage />}>
-          <Route path="/" element={<MainLayout />} >
-            <Route index element={<Dashboard />} loader={loader} />
-            <Route path="index-client" element={<IndexClient />} loader={indexLoader}/>
-            <Route path="fuites" element={<Fuite />} loader={leakesLoader}/>
-            <Route path="subscriber" element={<Subscribers />}/>
-            <Route path="new-subscriber" element={<AddSubscriber />}/>
-          </Route>
+        <Route path="/" element={<MainLayout />} errorElement={<ErrorPage />} >
+          <Route index element={<Dashboard />} loader={loader} />
+          <Route path="index-client" element={<IndexClient />} loader={indexLoader}/>
+          <Route path="fuites" element={<Fuite />} loader={leakesLoader}/>
+          <Route path="subscriber" element={<Subscribers />}/>
+          <Route path="new-subscriber" element={<AddSubscriber />}/>
         </Route>
       <Route path="/register" element={<RegisterPage />}></Route>
       <Route path="/login" element={<LoginPage />}></Route>

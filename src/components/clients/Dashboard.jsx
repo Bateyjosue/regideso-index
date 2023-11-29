@@ -28,7 +28,7 @@ function Dashboard() {
   const { agentCount: agent, subscriberCount: subscriber, leakCount: leak, indexCount: index } = useLoaderData()
   
   return (
-    <main>
+    <main className='mt-20'>
       <section className="grid grid-cols-4 gap-4 my-8 mx-12">
         <article>
           <div className="max-w-sm p-2 bg-white border border-gray-200 rounded-lg shadow dark:border-gray-700">

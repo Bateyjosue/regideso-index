@@ -14,11 +14,12 @@ const token = getToken()
 
 function Subscribers() {
   const { data, error, isLoading } = useSWR(url, fetcher)
-  const [subId, setSubId] = useState(null)
+  const [subscriberId, setSubscriberId] = useState(null)
+  const [loadDelete, setLoadDelete] = useState(false)
 
-  console.log(token)
   useEffect(() => {
-  fetch(`${baseUrl}subscribers?params={"id":"${subId}"}`, {
+    setLoadDelete(true)
+  fetch(`${baseUrl}subscribers?params={"id":"${subscriberId}"}`, {
     method: "DELETE",
     cache: "reload",
     headers: {
@@ -29,14 +30,11 @@ function Subscribers() {
   .then(response => {
     if (response.ok) {
       toast.success('Request was successful')
-      // Perform any additional actions if needed
+      setSubscriberId(undefined)
+      setLoadDelete(false)
+
     } else {
-      // Handle specific error cases
-      if (response.status === 404) {
-        toast.error("Subscriber not found");
-      } else {
         toast.error(`Error: ${response.statusText}`);
-      }
     }
   })
   .catch(error => {
@@ -44,7 +42,8 @@ function Subscribers() {
     console.error("Fetch error:", error);
     toast.error("An error occurred while processing your request.");
   });
-}, [subId]);
+    setLoadDelete(false)
+}, [subscriberId]);
 
   if (isLoading) {
     return <section className="mt-14 w-full h-full flex justify-center items-center">
@@ -109,9 +108,11 @@ function Subscribers() {
                     <span
                       className="material-symbols-outlined text-red-400 cursor-pointer hover:text-green-400"
                       id={sub.id}
-                      onClick={()=> setSubId(sub.id)}
+                      onClick={(e)=> setSubscriberId(e.target.id)}
                     >
-                      delete
+                      {
+                        loadDelete ? 'loading' : 'delete'
+                      }
                     </span>
                       <span className="material-symbols-outlined cursor-pointer">edit</span>
                   </td>

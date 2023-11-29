@@ -34,7 +34,7 @@ const { onDownload } = useDownloadExcel({
 
   return (
       <main className='mt-14'>
-        <button onClick={onDownload} className='my-12 bg-green-600 px-4 text-white rounded-full'> Export excel </button><div className="relative overflow-x-auto shadow-md sm:rounded-lg mx-12 ">
+        <button onClick={onDownload} className='my-12 mx-8 bg-green-600 px-4 text-white rounded-full'> Export excel </button><div className="relative overflow-x-auto shadow-md sm:rounded-lg mx-12 ">
           <table ref={tableRef} className="w-full text-sm text-left rtl:text-right text-gray-500">
             <thead className="text-xs text-gray-700 uppercase bg-gray-50 ">
             <tr>

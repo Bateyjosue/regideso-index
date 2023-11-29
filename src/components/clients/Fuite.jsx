@@ -48,7 +48,7 @@ function Fuite() {
   const { data: leakes } = useLoaderData()
   
   return (
-  <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
+  <div className="relative overflow-x-auto shadow-md sm:rounded-lg mt-20">
       <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
           <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:text-gray-400">
               <tr>

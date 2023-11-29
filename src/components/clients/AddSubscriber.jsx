@@ -67,7 +67,7 @@ function AddSubscriber() {
   if (addedData?.status === 201) return <Navigate to='/subscriber' replace/>
 
   return (
-    <main className="mt-14">
+    <main className="mt-14 mx-8">
       <section className="my-12">
         <h1 className="my-6 text-2xl underline underline-offset-8 font-bold opacity-40">Ajouter Un Nouvel Abonne</h1>
         <form action="" onSubmit={handleSubmit(onSubmit)} className=" w-4/5 leading-loose">
@@ -78,6 +78,7 @@ function AddSubscriber() {
             register={register}
             value={nanoid(10)}
           />
+          
           
           <Input
             placeholder="Nom Complet Ex: Josue Batey"
