@@ -2,15 +2,52 @@ import { fetcher } from '../../data/api'
 // import { Suspense } from 'react'
 import { Dna } from 'react-loader-spinner'
 import useSWR from 'swr'
+import toast from 'react-hot-toast'
+import { useEffect, useState } from 'react'
+import getToken from '../../data/auth'
 
 
 const url = 'https://regi-api.bingwainnovationhub.com/v1/subscribers?params={"page":"1", "limit":"100"}'
+const baseUrl = 'https://regi-api.bingwainnovationhub.com/v1/'
+const token = getToken()
+
 
 function Subscribers() {
   const { data, error, isLoading } = useSWR(url, fetcher)
+  const [subId, setSubId] = useState(null)
+
+  console.log(token)
+  useEffect(() => {
+  fetch(`${baseUrl}subscribers?params={"id":"${subId}"}`, {
+    method: "DELETE",
+    cache: "reload",
+    headers: {
+      'Authorization': `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+  })
+  .then(response => {
+    if (response.ok) {
+      toast.success('Request was successful')
+      // Perform any additional actions if needed
+    } else {
+      // Handle specific error cases
+      if (response.status === 404) {
+        toast.error("Subscriber not found");
+      } else {
+        toast.error(`Error: ${response.statusText}`);
+      }
+    }
+  })
+  .catch(error => {
+    // Handle fetch-related errors
+    console.error("Fetch error:", error);
+    toast.error("An error occurred while processing your request.");
+  });
+}, [subId]);
 
   if (isLoading) {
-    return <section className="mt-14">
+    return <section className="mt-14 w-full h-full flex justify-center items-center">
       <Dna
         visible={true}
         height="80"
@@ -21,7 +58,9 @@ function Subscribers() {
       />
     </section>
   }
-  if (error) return <div>Failed to load...:: {error?.message}</div>
+  if (error) {
+    toast.error(error?.message)
+  }
 
   const subscriber = data.subscribersResponse.rows
   
@@ -52,23 +91,29 @@ function Subscribers() {
           <tbody>
           {
             subscriber.length ? (
-              subscriber.map(leak => (
-                <tr key={leak.id} className="bg-white border-b  dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+              subscriber.map(sub => (
+                <tr key={sub.id} className="bg-white border-b  dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
                   <td className="p-4">
-                    {leak.full_name}
+                    {sub.full_name}
                   </td>
                   <td className="px-6 py-4">
-                    {leak.telephone}
+                    {sub.telephone}
                   </td>
                   <td className="px-6 py-4 font-semibold text-gray-900 ">
-                      {leak.physic_address}
+                      {sub.physic_address}
                   </td>
                   <td className="px-6 py-4 font-semibold text-gray-900 ">
-                      {leak.is_active ? 'active' : 'not active'}
+                      {sub.is_active ? 'active' : 'not active'}
                   </td>
                   <td className="px-6 py-4 font-semibold text-gray-900 flex gap-2 items-center">
-                      <span className="material-symbols-outlined text-red-400">delete</span>
-                      <span className="material-symbols-outlined">edit</span>
+                    <span
+                      className="material-symbols-outlined text-red-400 cursor-pointer hover:text-green-400"
+                      id={sub.id}
+                      onClick={()=> setSubId(sub.id)}
+                    >
+                      delete
+                    </span>
+                      <span className="material-symbols-outlined cursor-pointer">edit</span>
                   </td>
               </tr>
               ))
