@@ -7,7 +7,7 @@ import { logout } from '../auth/LoginPage';
 function Profile() {
   
   return (
-    <div className='h-14 flex justify-end items-center gap-4 text-gray-400 hover:text-gray-800s px-12'>
+    <div className='w-[80%] bg-white z-10 h-14 flex justify-end items-center gap-4 text-gray-400 hover:text-gray-800s px-12 fixed top-0 right-0'>
       <form className="flex items-center">   
         <label htmlFor="simple-search" className="sr-only">Search</label>
         <div className="relative w-full">

@@ -10,24 +10,26 @@ function Subscribers() {
   const { data, error, isLoading } = useSWR(url, fetcher)
 
   if (isLoading) {
-    return <Dna
-      visible={true}
-      height="80"
-      width="80"
-      ariaLabel="dna-loading"
-      wrapperStyle={{}}
-      wrapperClass="dna-wrapper"
-    />
+    return <section className="mt-14">
+      <Dna
+        visible={true}
+        height="80"
+        width="80"
+        ariaLabel="dna-loading"
+        wrapperStyle={{}}
+        wrapperClass="dna-wrapper"
+      />
+    </section>
   }
   if (error) return <div>Failed to load...:: {error?.message}</div>
 
   const subscriber = data.subscribersResponse.rows
   
   return (
-    <main>
-      <section>
+    <main className='mt-14'>
+      <section className='overflow-auto'>
         <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
-      <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+      <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 ">
           <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:text-gray-400">
               <tr>
                   <th scope="col" className="px-16 py-3">
@@ -40,8 +42,11 @@ function Subscribers() {
                       Localisation
                 </th>
                 <th scope="col" className="px-6 py-3">
-                      Status
-                  </th>
+                  Status
+                </th>
+                <th scope="col" className="px-6 py-3">
+                  Action
+                </th>
               </tr>
           </thead>
           <tbody>
@@ -60,6 +65,10 @@ function Subscribers() {
                   </td>
                   <td className="px-6 py-4 font-semibold text-gray-900 ">
                       {leak.is_active ? 'active' : 'not active'}
+                  </td>
+                  <td className="px-6 py-4 font-semibold text-gray-900 flex gap-2 items-center">
+                      <span className="material-symbols-outlined text-red-400">delete</span>
+                      <span className="material-symbols-outlined">edit</span>
                   </td>
               </tr>
               ))

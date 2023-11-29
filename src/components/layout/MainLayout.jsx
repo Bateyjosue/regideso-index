@@ -9,11 +9,11 @@ function MainLayout() {
   if (!logged) return <Navigate to='/login'/>
   
   return (
-    <div className="flex h-screen">
+    <div className="flex h-screen overflow-hidden">
       <header className="w-3/12 bg-gray-300/20">
         <SideBar/>
       </header>
-      <main className="w-11/12">
+      <main className="w-11/12 overflow-y-scroll">
         <Profile/>
         <Outlet className="w-full"/>
       </main>

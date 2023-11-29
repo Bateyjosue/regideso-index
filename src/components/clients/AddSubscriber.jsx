@@ -1,12 +1,9 @@
 import { useForm } from "react-hook-form"
 import Input from "../forms/Input"
 import { nanoid } from "nanoid"
-import { postData, addData } from "../../data/api"
-import  useSWR from 'swr'
 import { Dna } from 'react-loader-spinner'
 import toast from 'react-hot-toast'
-import {useNavigate} from 'react-router-dom'
-import axios from "axios"
+import { Navigate} from 'react-router-dom'
 import getToken from "../../data/auth"
 import { useState } from "react"
 
@@ -14,11 +11,10 @@ const url = 'https://regi-api.bingwainnovationhub.com/v1/subscribers'
 const token = getToken()
 
 function AddSubscriber() {
-  const navigate = useNavigate()
 
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
-  const [addedData, setData] = useState([null])
+  const [addedData, setData] = useState(null)
 
   const {
     register,
@@ -26,53 +22,52 @@ function AddSubscriber() {
     formState: {errors}
   } = useForm()
 
-  const onSubmit = async (data) => {
-    try {
-      setLoading(true)
-      const subScribeResponse = await axios.post(url,data, {
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          "Content-Type": "application/json",
-        }, manuel: true
+  const onSubmit = (data) => {
+    setLoading(true)
+    fetch(url, {
+      method: "POST",
+      cache: "reload",
+      mode: "cors",
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data)
+    },).then(response => response.json())
+      .then(data => {
+        if (data.status === 201) {
+          setData(data)
+        }
+        if (data.status !== 201){
+        setError(data)
+        }
+        setLoading(false)
+        
       })
-
-      const subScribeData = await subScribeResponse.data
-      console.log(subScribeData)
-      if (subScribeData.status >= 200 && subScribeData.status <= 209) {
-        setData(subScribeData)
-      }
-      if (subScribeData.status < 200 && subScribeData.status > 209) {
-        setError(subScribeData)
-      }
-      setLoading(false)
-    } catch (e) {
-      setError(e)
-    }
+      .catch(err => console.log(err.message))
+  }
+  
+  if (loading) {
+    return <section className="mt-14">
+      <Dna
+        visible={true}
+        height="80"
+        width="80"
+        ariaLabel="dna-loading"
+        wrapperStyle={{}}
+        wrapperClass="dna-wrapper"
+      />
+    </section>
   }
 
-  // if (loading) {
-  //   return <Dna
-  //     visible={true}
-  //     height="80"
-  //     width="80"
-  //     ariaLabel="dna-loading"
-  //     wrapperStyle={{}}
-  //     wrapperClass="dna-wrapper"
-  //   />
-  // }
+  if (error) {
+    toast.error(error?.message)
+  }
 
-  // if (error) {
-  //   toast.error(error?.message)
-  //   // return toast.error(error?.response.data.message)
-  // }
-  
-
-  console.log(error)
-  console.log(addData)
-
+  if (addedData?.status === 201) return <Navigate to='/subscriber' replace/>
 
   return (
-    <main>
+    <main className="mt-14">
       <section className="my-12">
         <h1 className="my-6 text-2xl underline underline-offset-8 font-bold opacity-40">Ajouter Un Nouvel Abonne</h1>
         <form action="" onSubmit={handleSubmit(onSubmit)} className=" w-4/5 leading-loose">
