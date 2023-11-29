@@ -43,7 +43,7 @@ function Subscribers() {
     toast.error("An error occurred while processing your request.");
   });
     setLoadDelete(false)
-}, [subscriberId]);
+}, [subscriberId, loadDelete]);
 
   if (isLoading) {
     return <section className="mt-14 w-full h-full flex justify-center items-center">

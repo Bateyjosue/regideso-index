@@ -4,6 +4,7 @@
 import { Sidebar } from 'flowbite-react';
 import { HiShoppingBag, HiChartPie, HiUser, HiDocumentReport, HiBell } from 'react-icons/hi';
 import IMAGES from '../../assets/images'
+import { Link } from 'react-router-dom';
 
 function SideBar() {
   return (
@@ -26,14 +27,20 @@ function SideBar() {
             <Sidebar.Item href="#"></Sidebar.Item>
           </Sidebar.Collapse>
           <Sidebar.Collapse href="#" icon={HiUser} label="Abonnes" className="gap-4 py-2 justify-start px-12 hover:bg-blue-200 hover:text-white hover:rounded-none">
-            <Sidebar.Item href="subscriber">List des Abonnes</Sidebar.Item>
-            <Sidebar.Item href="new-subscriber">Ajouter un Abonne</Sidebar.Item>
+            <Sidebar.Item>
+              <Link to='subscriber'>List des Abonnes</Link>
+            </Sidebar.Item>
+            <Sidebar.Item>
+              <Link to='new-subscriber'>Ajouter un Abonne</Link>
+            </Sidebar.Item>
           </Sidebar.Collapse>
-          <Sidebar.Item href="index-client" icon={HiBell} className="gap-4 py-2 justify-start px-12 hover:bg-blue-200 hover:text-white hover:rounded-none">
-            Index Clients
+          <Sidebar.Item icon={HiBell} className="gap-4 py-2 justify-start px-12 hover:bg-blue-200 hover:text-white hover:rounded-none">
+            <Link to='index-client'>Index Clients</Link>
           </Sidebar.Item>
-          <Sidebar.Item href="fuites" icon={HiBell} className="gap-4 py-2 justify-start px-12 hover:bg-blue-200 hover:text-white hover:rounded-none">
-            Fuites
+          <Sidebar.Item icon={HiBell} className="gap-4 py-2 justify-start px-12 hover:bg-blue-200 hover:text-white hover:rounded-none">
+            <Link to='fuites'>
+              Fuites
+            </Link>
           </Sidebar.Item>
           <Sidebar.Item href="#" icon={HiDocumentReport} className="gap-4 py-2  justify-start px-12 hover:bg-blue-200 hover:text-white hover:rounded-none">
             Rapports
