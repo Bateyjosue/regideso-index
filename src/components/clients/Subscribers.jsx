@@ -5,6 +5,7 @@ import useSWR from 'swr'
 import toast from 'react-hot-toast'
 import { useEffect, useState } from 'react'
 import getToken from '../../data/auth'
+import { Link } from 'react-router-dom'
 
 
 const url = 'https://regi-api.bingwainnovationhub.com/v1/subscribers?params={"page":"1", "limit":"100"}'
@@ -93,7 +94,12 @@ function Subscribers() {
               subscriber.map(sub => (
                 <tr key={sub.id} className="bg-white border-b  dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
                   <td className="p-4">
-                    {sub.full_name}
+                    <Link to={`${sub.id}`} className='flex gap-2 items-center'>
+                      <span className="material-symbols-outlined text-green-500">qr_code_2</span>
+                      <span>
+                        {sub.full_name}
+                      </span>
+                    </Link>
                   </td>
                   <td className="px-6 py-4">
                     {sub.telephone}

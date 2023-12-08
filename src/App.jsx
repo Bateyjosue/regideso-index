@@ -10,6 +10,7 @@ import Subscribers from "./components/clients/Subscribers"
 import AddSubscriber from "./components/clients/AddSubscriber"
 
 import { Toaster } from 'react-hot-toast';
+import QrCode from "./components/clients/QrCode"
 
 function App() {
 
@@ -21,7 +22,12 @@ function App() {
           <Route path="index-client" element={<IndexClient />} loader={indexLoader}/>
           <Route path="fuites" element={<Fuite />} loader={leakesLoader}/>
           <Route path="subscriber" element={<Subscribers />}/>
+          <Route path="subscriber">
+            <Route index element={<Subscribers />} />
+            <Route path=":id" element={<QrCode />} />
+          </Route>
           <Route path="new-subscriber" element={<AddSubscriber />}/>
+          
         </Route>
       <Route path="/register" element={<RegisterPage />}></Route>
       <Route path="/login" element={<LoginPage />}></Route>
