@@ -1,4 +1,3 @@
-import useSWR from 'swr'
 import getToken from "../data/auth"
 import { useEffect, useState } from 'react'
 
@@ -20,8 +19,6 @@ const useUser = (id) => {
   const [loading, setLoading] = useState(null)
   const [error, setError] = useState(null)
 
-  
-
   useEffect(() => {
     setLoading(true)
     fetch(`${baseUrl}/subscribers?params={"page":"1", "limit":"100"}`, {
@@ -37,10 +34,7 @@ const useUser = (id) => {
     .finally(() => setLoading(false))
   }, [])
   
-  console.log(data, loading, error);
-
-  const userData = data.filter(data => data.identification_code === id)
-
+  const userData = data.rows?.filter(user => user.identification_code === id)
 
   return {
     data: userData,

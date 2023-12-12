@@ -13,7 +13,9 @@ function QrCode() {
   })
 
   return (
-    <div className='flex items-center justify-center w- h-full'>
+    <div className='flex flex-col items-center justify-center w- h-full'>
+      <div className='font-bold py-2'>{data[0].full_name} || {data[0].physic_address
+}</div>
       <QRCode value={id} />
     </div>
   )
