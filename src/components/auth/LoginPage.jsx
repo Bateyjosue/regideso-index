@@ -3,6 +3,11 @@ import Input from "../forms/Input"
 import { useForm } from "react-hook-form"
 import { createAuthProvider } from "react-token-auth"
 import IMAGES from "../../assets/images"
+import { useState } from "react"
+import toast from 'react-hot-toast'
+import { Oval } from 'react-loader-spinner'
+
+
 
 // eslint-disable-next-line react-refresh/only-export-components
 export const [useAuth, authFetch, login, logout] = createAuthProvider({
@@ -16,6 +21,10 @@ export const [useAuth, authFetch, login, logout] = createAuthProvider({
 const baseUrl = 'https://regi-api.bingwainnovationhub.com/v1/'
 
 function LoginPage() {
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState(null)
+  // const [data, setData] = useState(false)
+
   const navigate = useNavigate()
   
   const {
@@ -26,6 +35,7 @@ function LoginPage() {
 
   const onSubmit = async data => {
     try {
+      setLoading(true)
       const responseLogin = await fetch(`${baseUrl}users/signin`, {
         method: "POST",
         cache: "reload",
@@ -39,14 +49,17 @@ function LoginPage() {
       if(JSON.stringify(loginData).status >= 200 && JSON.stringify(loginData).status <= 209)alert(JSON.stringify(loginData))
       login(data)
       localStorage.setItem('access_token', loginData.loginResponse.accessToken)
-      
-
+      setLoading(false)
       navigate('/', {replace: true})
     }
     catch (error) {
-      console.log(error);
+      setError(error);
+      setLoading(false)
     }
-    
+  }
+
+  if (error) {
+    toast.error('Invalide Creadetials')
   }
 
   return (
@@ -81,7 +94,21 @@ function LoginPage() {
 
             <span
               className="text-xs text-blue-500 font-semibold -mt-3 cursor-pointer">Forget Password?</span>
-            <button className="rounded-full bg-blue-500 w-2/4 mx-auto text-sm py-2 text-white font-bold" type="submit">Login</button>
+            <button className={`rounded-full bg-blue-500 w-2/4 mx-auto text-sm py-2 text-white font-bold ${loading && ' flex gap-1'}`} type="submit">
+              <span>
+              {loading && (<Oval 
+  height="20"
+  width="80"
+  radius={2}
+  color="white"
+  ariaLabel="puff-loading"
+  wrapperStyle={{}}
+  wrapperClass=""
+  visible={true}
+/>)}
+              </span>
+              <span>Login</span>
+            </button>
             <span className="text-sm underline">
               Don&apos;t have an account? <Link to="/register" className="text-blue-500">Sign up</Link>
             </span>
@@ -93,11 +120,3 @@ function LoginPage() {
 }
 
 export default LoginPage
-
-
-// {
-//     "identification_code":"ABONE00001",
-//     "full_name":"batey ngangala",
-//     "telephone":"+243998877654",
-//     "physic_address":"kigali city"
-// }

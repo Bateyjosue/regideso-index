@@ -94,7 +94,7 @@ function Subscribers() {
               subscriber.map(sub => (
                 <tr key={sub.id} className="bg-white border-b  dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
                   <td className="p-4">
-                    <Link to={`${sub.id}`} className='flex gap-2 items-center'>
+                    <Link to={`${sub.identification_code}`} className='flex gap-2 items-center'>
                       <span className="material-symbols-outlined text-green-500">qr_code_2</span>
                       <span>
                         {sub.full_name}
