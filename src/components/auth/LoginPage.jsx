@@ -45,7 +45,9 @@ function LoginPage() {
         },
         body: JSON.stringify(data)
       },)
+
       const loginData = await responseLogin.json()
+      
       if(JSON.stringify(loginData).status >= 200 && JSON.stringify(loginData).status <= 209)alert(JSON.stringify(loginData))
       login(data)
       localStorage.setItem('access_token', loginData.loginResponse.accessToken)

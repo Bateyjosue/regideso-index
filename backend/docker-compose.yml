@@ -11,30 +11,30 @@ services:
             PORT: ${PORT}
             POSTGRES_HOST: ${POSTGRES_HOST}
         ports:
-            - ${PORT}:${PORT}
+            - 3000:3000
         depends_on:
             - postgres_db
         networks:
             myapp_net:
 
     postgres_db:
-        image: bitnami/postgresql:15
+        image: postgres
         container_name: "reg_index_db"
-        restart: unless-stopped
+        restart: always
         environment:
+            POSTGRES_HOST: $POSTGRES_HOST}
             POSTGRES_USER: ${POSTGRES_USER}
             POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
             POSTGRES_DB: ${POSTGRES_DB}
-            POSTGRES_TIMEZONE: ${POSTGRES_TIMEZONE}
         ports:
-            - ${POSTGRES_PORT}:5432
+            - ${POSTGRES_PORT}:${POSTGRES_PORT}
         volumes:
-            - "postgres_data:/bitnami/postgresql"
+            - "postgres:/var/lib/postgresql/data"
         networks:
             myapp_net:
 
 volumes:
-    postgres_data:
+    postgres:
 
 networks:
     myapp_net:
