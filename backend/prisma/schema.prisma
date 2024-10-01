@@ -62,15 +62,21 @@ model Avenue {
     updatedAt   DateTime @updatedAt
 }
 
-// model Level {
-//     code_level String @id @default(dbgenerated("gen_random_uuid")) @db.Uuid()
-//     name String
+model Level {
+    code_level String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid()
+    name String @unique
     
-// }
+    createdAt   DateTime @default(now())
+    updatedAt   DateTime @updatedAt
+}
 
-// model Category {
-//     id    Int     @id @default(autoincrement())
-// }
+model Category {
+    code_category String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid()
+    name String @unique
+
+    createdAt   DateTime @default(now())
+    updatedAt   DateTime @updatedAt
+}
 
 // model Agent {
 //     id    Int     @id @default(autoincrement())
