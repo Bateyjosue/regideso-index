@@ -18,7 +18,7 @@ datasource db {
 
 
 model User {
-  id            Int       @id @default(autoincrement())
+  id            String       @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid()
   name          String
   email         String    @unique
   password_hash String
@@ -30,18 +30,35 @@ enum Role {
   ADMIN
 }
 model Direction {
-    id    Int     @id @default(autoincrement())
+    num_direction String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid()
+    code_direction String @unique
+    name String
+    Agencies Agency[]
+    
+    createdAt   DateTime @default(now())
+    updatedAt   DateTime @updatedAt
 }
 
-// model Centre {
+model Agency {
+    num_agency String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid()
+    code_agency String @unique
+    num_direction String @db.Uuid()
+    name String
+    direction Direction @relation(fields: [num_direction], references: [num_direction])
+
+    createdAt   DateTime @default(now())
+    updatedAt   DateTime @updatedAt
+}
+
+// model Avenue {
 //     id    Int     @id @default(autoincrement())
 // }
 
-// model Service {
+// model Level {
 //     id    Int     @id @default(autoincrement())
 // }
 
-// model Agence {
+// model Category {
 //     id    Int     @id @default(autoincrement())
 // }
 
@@ -49,6 +66,6 @@ model Direction {
 //     id    Int     @id @default(autoincrement())
 // }
 
-// model Abonne {
+// model Subscriber {
 //     id    Int     @id @default(autoincrement())
 // }
