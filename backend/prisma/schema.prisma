@@ -59,6 +59,8 @@ model Avenue {
     code_agency String @unique @db.Uuid()
     agency Agency @relation(fields: [code_agency], references: [code_agency])
 
+    Subscribers Subscriber[]
+
     createdAt   DateTime @default(now())
     updatedAt   DateTime @updatedAt
 }
@@ -81,6 +83,9 @@ model Category {
     code_agent String @db.Uuid()
     agent Agent @relation(fields: [code_agent], references: [code_agent])
 
+    code_subscriber String @db.Uuid()
+    subscriber Subscriber @relation(fields: [code_subscriber], references: [code_subscriber])
+
     createdAt   DateTime @default(now())
     updatedAt   DateTime @updatedAt
 }
@@ -95,7 +100,7 @@ model Agent {
 
     levels Level[]
     categories Category[]
-    
+
     code_agency String @db.Uuid()
     agency Agency @relation(fields: [code_agency], references: [code_agency])
 
@@ -104,6 +109,18 @@ model Agent {
 
 }
 
-// model Subscriber {
-//     id    Int     @id @default(autoincrement())
-// }
+model Subscriber {
+    code_subscriber String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid()
+    first_name String
+    last_name  String
+    sur_name String
+    telephone   String
+
+    categories Category[]
+
+    code_avenue String @db.Uuid()
+    avenue Avenue @relation(fields: [code_avenue], references: [code_avenue])
+
+    createdAt   DateTime @default(now())
+    updatedAt   DateTime @updatedAt
+}
