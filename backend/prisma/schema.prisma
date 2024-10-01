@@ -30,8 +30,7 @@ enum Role {
   ADMIN
 }
 model Direction {
-    num_direction String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid()
-    code_direction String @unique
+    code_direction String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid()
     name String
     Agencies Agency[]
     
@@ -40,22 +39,33 @@ model Direction {
 }
 
 model Agency {
-    num_agency String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid()
-    code_agency String @unique
-    num_direction String @db.Uuid()
+    code_agency String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid()
     name String
-    direction Direction @relation(fields: [num_direction], references: [num_direction])
+
+    code_direction String @db.Uuid()
+    direction Direction @relation(fields: [code_direction], references: [code_direction])
+
+    avenue Avenue?
 
     createdAt   DateTime @default(now())
     updatedAt   DateTime @updatedAt
 }
 
-// model Avenue {
-//     id    Int     @id @default(autoincrement())
-// }
+model Avenue {
+    code_avenue String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid()
+    name String
+    
+    code_agency String @unique @db.Uuid()
+    agency Agency @relation(fields: [code_agency], references: [code_agency])
+
+    createdAt   DateTime @default(now())
+    updatedAt   DateTime @updatedAt
+}
 
 // model Level {
-//     id    Int     @id @default(autoincrement())
+//     code_level String @id @default(dbgenerated("gen_random_uuid")) @db.Uuid()
+//     name String
+    
 // }
 
 // model Category {
