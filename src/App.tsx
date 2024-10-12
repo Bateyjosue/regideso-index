@@ -6,6 +6,7 @@ import { Toaster } from 'react-hot-toast';
 import MainLayout from "./components/layout/MainLayout";
 import SignUp from "./components/pages/auth/SignUp";
 import LoginPage from "./components/pages/auth/Login";
+import NotFound from "./components/pages/NotFound";
 
 /**
  * The main application component.
@@ -22,8 +23,7 @@ const App:React.FC = ()=> {
         <Route path="/" element={<MainLayout />} errorElement={<ErrorPage />} >          
         </Route>
       <Route path="/login" element={<LoginPage />} />
-      <Route path="/register" element={<SignUp />} />
-      <Route path="*" element={<ErrorPage />}></Route>
+      <Route path="*" element={<NotFound />}></Route>
     </Route>
     )
   )
