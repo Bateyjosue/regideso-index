@@ -4,7 +4,6 @@ import ErrorPage from "./components/Error/ErrorPage"
 
 import { Toaster } from 'react-hot-toast';
 import MainLayout from "./components/layout/MainLayout";
-import SignUp from "./components/pages/auth/SignUp";
 import LoginPage from "./components/pages/auth/Login";
 import NotFound from "./components/pages/NotFound";
 

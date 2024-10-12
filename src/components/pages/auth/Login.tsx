@@ -15,7 +15,7 @@ const LoginPage: React.FC =() => {
                 {/* <img className="dark:hidden" src={LogoDark} alt="Logo" /> */}
               </Link>
 
-              <p className="2xl:px-20 text-3xl font-bold border">
+              <p className="2xl:px-20 text-3xl font-bold">
                 Let's change lifes, by providing clean water
               </p>
 
@@ -265,9 +265,9 @@ const LoginPage: React.FC =() => {
 
                 <div className="mt-6 text-center">
                   <p>
-                    Don’t have any account?{' '}
-                    <Link to="/auth/signup" className="text-primary">
-                      Sign Up
+                    Forget Password?{' '}
+                    <Link to="/contact" className="text-primary">
+                      Contact the Administator
                     </Link>
                   </p>
                 </div>
