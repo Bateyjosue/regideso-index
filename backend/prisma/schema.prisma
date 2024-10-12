@@ -101,6 +101,7 @@ model Agent {
     sur_name String
     telephone   String
 
+    // To be removed becuase the agent can habe only one level and category
     levels Level[]
     categories Category[]
 
@@ -119,6 +120,7 @@ model Subscriber {
     sur_name String
     telephone   String
 
+  // to be removed becausae the subscriber can belong to only one category
     categories Category[]
 
     code_avenue String @db.Uuid()
