@@ -1,23 +1,38 @@
+import { useState } from "react";
 import { Outlet } from "react-router-dom"
+import Header from "../ui/Header";
 // import SideBar from "../navigation/SideBar"
 // import Profile from "../navigation/Profile"
 // import { useAuth } from "../auth/LoginPage"
 
 const MainLayout: React.FC<{}> = ()=> {
-
-  // if (!logged) return <Navigate to='/login'/>
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   
   return (
-    <div className="flex h-screen">
-      <header
-        className="w-3/10 bg-gray-300/20"> Header
-      </header>
-      <main className="w-11/12">
-        <div className="w-full">
-        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ut aliquid minus, cum dolorem rerum quia quisquam doloribus! Incidunt recusandae similique repudiandae tenetur voluptas laudantium sed delectus hic necessitatibus laboriosam voluptatem itaque blanditiis dolores, molestias fuga obcaecati, velit sequi illo possimus nesciunt earum corporis maxime omnis. Perferendis praesentium beatae distinctio veritatis laborum officia suscipit dolore autem earum dolorem esse, vel asperiores quos voluptatem numquam possimus inventore nihil perspiciatis nesciunt ipsa. Vitae necessitatibus quam consequatur fuga vel, ratione cumque perspiciatis repudiandae! Quia quidem sed tempore nihil quibusdam! Aut ipsum numquam tenetur ullam quibusdam quidem sed porro dicta minus, praesentium, vero eum atque!
-          <Outlet />
+    <div className="dark:bg-boxdark-2 dark:text-bodydark">
+      {/* <!-- ===== Page Wrapper Start ===== --> */}
+      <div className="flex h-screen overflow-hidden">
+        {/* <!-- ===== Sidebar Start ===== --> */}
+        {/* <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} /> */}
+        {/* <!-- ===== Sidebar End ===== --> */}
+
+        {/* <!-- ===== Content Area Start ===== --> */}
+        <div className="relative flex flex-1 flex-col overflow-y-auto overflow-x-hidden">
+          {/* <!-- ===== Header Start ===== --> */}
+          <Header sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
+          {/* <!-- ===== Header End ===== --> */}
+
+          {/* <!-- ===== Main Content Start ===== --> */}
+          <main>
+            <div className="mx-auto max-w-screen-2xl p-4 md:p-6 2xl:p-10">
+              <Outlet />
+            </div>
+          </main>
+          {/* <!-- ===== Main Content End ===== --> */}
         </div>
-      </main>
+        {/* <!-- ===== Content Area End ===== --> */}
+      </div>
+      {/* <!-- ===== Page Wrapper End ===== --> */}
     </div>
   )
 
