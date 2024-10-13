@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import UserIcon from './User';
+import { logout } from '../../auth/authService';
 // import ClickOutside from '../ClickOutside';
 // import UserOne from '../../images/user/user-01.png';
 
@@ -121,7 +122,7 @@ const DropdownUser = () => {
               </Link>
             </li>
           </ul>
-          <button className="flex items-center gap-3.5 px-6 py-4 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base">
+          <button className="flex items-center gap-3.5 px-6 py-4 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base" onClick={async () => await logout()}>
             <svg
               className="fill-current"
               width="22"
