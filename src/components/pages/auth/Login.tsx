@@ -1,12 +1,40 @@
 import { Link } from "react-router-dom";
 import Breadcrumb from "../../ui/Breadcrumb";
+import { useForm, SubmitHandler } from "react-hook-form"
+import Input from "../../forms/Input";
+import { useState } from "react";
 
-const LoginPage: React.FC =() => {
+interface IFormInput {
+  email: string;
+  password: string;
+}
+
+const LoginPage: React.FC = () => {
+  const [email, setEmail] = useState<string>('')
+  const [password, setPassword] = useState<string>('')
+  const [LoginData, setLoginData] = useState<IFormInput|null>(null)
+  
+  const { register, formState:{errors}, handleSubmit } = useForm<IFormInput>()
+  const onSubmit: SubmitHandler<IFormInput> = (data) => setLoginData(data)
+  const handleInputChange = (e: Event) => {
+    if (e.target instanceof HTMLInputElement) {
+      switch (e.target.type) {
+        case 'email':
+          setEmail(e.target.value);
+          break;
+        case 'password':
+          setPassword(e.target.value);
+          break;
+        default:
+          break;
+      }
+    }
+  }
     return (
-        <>
+        <div className="pt-4">
       <Breadcrumb pageName="Sign In" />
 
-      <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-[strokedark] dark:bg-boxdark">
+      <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-[strokedark] dark:bg-boxdark md: my-16">
         <div className="flex flex-wrap items-center">
           <div className="hidden w-full xl:block xl:w-1/2">
             <div className="py-17.5 px-26 text-center">
@@ -150,16 +178,20 @@ const LoginPage: React.FC =() => {
                 Sign In to Regi Index board
               </h2>
 
-              <form>
+              <form onSubmit={handleSubmit(onSubmit)}>
                 <div className="mb-4">
                   <label className="mb-2.5 block font-medium text-black dark:text-white">
                     Email
                   </label>
                   <div className="relative">
-                    <input
-                      type="email"
-                      placeholder="Enter your email"
-                      className="w-full rounded-lg border border-stroke bg-transparent py-4 pl-6 pr-10 text-black outline-none focus:border-primary focus-visible:shadow-none dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+                    <Input
+                        type="email"
+                        placeholder="Enter your email"
+                        className="w-full rounded-lg border border-stroke bg-transparent py-4 pl-6 pr-10 text-black outline-none focus:border-primary focus-visible:shadow-none dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+                        label="email"
+                        value={email}
+                        register={register}
+                        onChange={ handleInputChange}
                     />
 
                     <span className="absolute right-4 top-4">
@@ -178,19 +210,24 @@ const LoginPage: React.FC =() => {
                           />
                         </g>
                       </svg>
-                    </span>
+                      </span>
+                      {errors.email && <p className="text-red-500">Email is required</p>}
                   </div>
                 </div>
 
                 <div className="mb-6">
                   <label className="mb-2.5 block font-medium text-black dark:text-white">
-                    Re-type Password
+                    Password
                   </label>
                   <div className="relative">
-                    <input
+                    <Input
                       type="password"
                       placeholder="6+ Characters, 1 Capital letter"
-                      className="w-full rounded-lg border border-stroke bg-transparent py-4 pl-6 pr-10 text-black outline-none focus:border-primary focus-visible:shadow-none dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+                        className="w-full rounded-lg border border-stroke bg-transparent py-4 pl-6 pr-10 text-black outline-none focus:border-primary focus-visible:shadow-none dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
+                        label="password"
+                        value={password}
+                        register={register}
+                        onChange={ handleInputChange}
                     />
 
                     <span className="absolute right-4 top-4">
@@ -213,7 +250,9 @@ const LoginPage: React.FC =() => {
                           />
                         </g>
                       </svg>
-                    </span>
+                      </span>
+                      {errors.password && <p className="text-red-500">Password is required</p>}
+
                   </div>
                 </div>
 
@@ -225,7 +264,10 @@ const LoginPage: React.FC =() => {
                   />
                 </div>
 
-                <button className="flex w-full items-center justify-center gap-3.5 rounded-lg border border-stroke bg-gray p-4 hover:bg-opacity-50 dark:border-strokedark dark:bg-meta-4 dark:hover:bg-opacity-50">
+                  <button
+                    className="flex w-full items-center justify-center gap-3.5 rounded-lg border border-stroke bg-gray p-4 hover:bg-opacity-50 dark:border-strokedark dark:bg-meta-4 dark:hover:bg-opacity-50"
+                    type="submit"
+                  >
                     
                   <span>
                     <svg
@@ -276,7 +318,7 @@ const LoginPage: React.FC =() => {
           </div>
         </div>
       </div>
-    </>
+    </div>
     )
 }
 export default LoginPage;
