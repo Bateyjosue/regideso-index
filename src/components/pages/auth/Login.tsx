@@ -341,6 +341,7 @@ const LoginPage: React.FC = (): JSX.Element => {
                   </span>
                   Sign in with Google
                 </button>
+
                 <div className="mt-6 text-center">
                   <p>
                     Forget Password?{' '}

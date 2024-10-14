@@ -27,8 +27,8 @@ const App:React.FC = ()=> {
 
   return (
     <>
-      <Toaster />
-        <RouterProvider router={router} />
+      <Toaster/>
+      <RouterProvider router={router} />
     </>
   )
 }
