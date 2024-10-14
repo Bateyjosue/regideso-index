@@ -20,6 +20,11 @@ export async function signUp(email: string, password: string) {
   }
 }
 
+interface ILoginParams {
+  email: string;
+  password: string;
+}
+
 /**
  * Logs in a user with the given email and password.
  * @param {string} email the user's email
@@ -27,14 +32,14 @@ export async function signUp(email: string, password: string) {
  * @returns {Promise<import("supabase").AuthSession>} the newly created session
  * @throws {Error} if there was an error logging in the user
  */
-export async function login(email: string, password: string) {
+export async function login({email, password}: ILoginParams) {
   try {
-    const { data: session } = await supabase.auth.signInWithPassword({
+    const { data: session, error } = await supabase.auth.signInWithPassword({
       email,
       password,
     });
 
-    return session;
+    return {session, error};
   } catch (error) {
     throw error;
   }

@@ -1,35 +1,72 @@
-import { Link } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 import Breadcrumb from "../../ui/Breadcrumb";
 import { useForm, SubmitHandler } from "react-hook-form"
 import Input from "../../forms/Input";
-import { useState } from "react";
+import { ErrorInfo, ReactNode, SetStateAction, useEffect, useState } from "react";
+import { login } from "../../../auth/authService";
+import { AuthApiError, AuthError, User, WeakPassword } from "@supabase/supabase-js";
+import toast from "react-hot-toast";
+import { Session } from "inspector/promises";
 
 interface IFormInput {
   email: string;
   password: string;
 }
 
-const LoginPage: React.FC = () => {
+interface ISessionParams {
+    user: User | null;
+    session: Session | null;
+    weakPassword?: WeakPassword | null;
+} 
+
+interface ISessionParamsNull {
+    user: null;
+    session: null;
+    weakPassword?: null;
+} 
+const LoginPage: React.FC = (): JSX.Element => {
   const [email, setEmail] = useState<string>('')
   const [password, setPassword] = useState<string>('')
-  const [LoginData, setLoginData] = useState<IFormInput|null>(null)
+  const [error, setError] = useState<AuthApiError | null>(null)
   
-  const { register, formState:{errors}, handleSubmit } = useForm<IFormInput>()
-  const onSubmit: SubmitHandler<IFormInput> = (data) => setLoginData(data)
-  const handleInputChange = (e: Event) => {
-    if (e.target instanceof HTMLInputElement) {
-      switch (e.target.type) {
-        case 'email':
-          setEmail(e.target.value);
-          break;
-        case 'password':
-          setPassword(e.target.value);
-          break;
-        default:
-          break;
+  const navigate = useNavigate()
+    
+    const { register, formState:{errors}, handleSubmit } = useForm<IFormInput>()
+  const onSubmit: SubmitHandler<IFormInput> = async (loginData) => {
+    console.log('Handle Login')
+      try {
+        const { session, error } = await login(loginData)      
+        if (error) {
+          throw error;
+        }
+
+        if (session?.session) {
+          return navigate('/');
+        } 
+      } catch (error: AuthApiError | any) {
+          setError(error)
       }
     }
+
+    const handleInputChange = (e: Event) => {
+      if (e.target instanceof HTMLInputElement) {
+        switch (e.target.type) {
+          case 'email':
+            setEmail(e.target.value);
+            break;
+          case 'password':
+            setPassword(e.target.value);
+            break;
+          default:
+            break;
+        }
+      }
+    }
+
+  if (error) {
+    toast( `${error?.message}`)
   }
+
     return (
         <div className="pt-4">
       <Breadcrumb pageName="Sign In" />
@@ -304,7 +341,6 @@ const LoginPage: React.FC = () => {
                   </span>
                   Sign in with Google
                 </button>
-
                 <div className="mt-6 text-center">
                   <p>
                     Forget Password?{' '}

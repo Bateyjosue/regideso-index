@@ -1,7 +1,5 @@
 import { RouterProvider, createBrowserRouter, Route, createRoutesFromElements } from "react-router-dom"
-// import MainLayout from "./components/layout/MainLayout"
 import ErrorPage from "./components/Error/ErrorPage"
-
 import { Toaster } from 'react-hot-toast';
 import MainLayout from "./components/layout/MainLayout";
 import LoginPage from "./components/pages/auth/Login";
@@ -21,16 +19,16 @@ const App:React.FC = ()=> {
       <Route>
         <Route path="/" element={<MainLayout />} errorElement={<ErrorPage />} >          
         </Route>
-      <Route path="/login" element={<LoginPage />} />
+      <Route path="/login" element={<LoginPage />} errorElement={<ErrorPage />} />
       <Route path="*" element={<NotFound />}></Route>
-    </Route>
+      </Route>
     )
   )
 
   return (
     <>
-      <Toaster/>
-      <RouterProvider router={router} />
+      <Toaster />
+        <RouterProvider router={router} />
     </>
   )
 }
