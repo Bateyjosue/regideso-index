@@ -7,6 +7,7 @@ import NotFound from "./components/pages/NotFound";
 import DirectionLayout from "./components/layout/DirectionLayout";
 import AgentLayout from "./components/layout/AgentLayout";
 import SubscriberLayout from "./components/layout/SubscriberLayout";
+import Dashboard from "./components/ui/Dashboard";
 
 /**
  * The main application component.
@@ -21,7 +22,7 @@ const App:React.FC = ()=> {
     createRoutesFromElements(
       <Route>
         <Route path="/" element={<MainLayout />} errorElement={<ErrorPage />} >
-          <Route index element={<div>Dashboard</div>} />
+          <Route index element={<Dashboard />} />
           <Route path="/direction" element={<DirectionLayout/>}>
             <Route path="agency" element={<div>Direction / Agency</div>} />
             <Route path="avenue" element={<div>Direction / Avenue</div>} />
