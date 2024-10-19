@@ -3,7 +3,7 @@ import Breadcrumb from "../../ui/Breadcrumb";
 import { useForm, SubmitHandler } from "react-hook-form"
 import Input from "../../forms/Input";
 import { ErrorInfo, ReactNode, SetStateAction, useEffect, useState } from "react";
-import { login } from "../../../auth/authService";
+import { login } from "../../../data/auth/authService";
 import { AuthApiError, AuthError, User, WeakPassword } from "@supabase/supabase-js";
 import toast from "react-hot-toast";
 import { Session } from "inspector/promises";
@@ -33,7 +33,6 @@ const LoginPage: React.FC = (): JSX.Element => {
     
     const { register, formState:{errors}, handleSubmit } = useForm<IFormInput>()
   const onSubmit: SubmitHandler<IFormInput> = async (loginData) => {
-    console.log('Handle Login')
       try {
         const { session, error } = await login(loginData)      
         if (error) {

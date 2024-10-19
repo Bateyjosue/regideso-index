@@ -1,14 +1,18 @@
 import { ErrorInfo, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import UserIcon from './User';
-import { logout } from '../../auth/authService';
+import { logout } from '../../data/auth/authService';
+import toast from 'react-hot-toast';
+import { PostgrestError } from '@supabase/supabase-js';
+import { IProfile } from '../../data/types';
 // import ClickOutside from '../ClickOutside';
 // import UserOne from '../../images/user/user-01.png';
 
-const DropdownUser = () => {
+const DropdownUser = (props: {fullName: string, role: string}) => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
-  const [error, setError] = useState<ErrorInfo | unknown>(null);
-
+  const [error, setError] = useState<PostgrestError | unknown>(null);
+  
+  const {fullName, role} = props
   const navigate = useNavigate()
 
   const handleLogout = async() => {
@@ -20,26 +24,36 @@ const DropdownUser = () => {
     }
   }
 
+  const handleOpenDropdown = () => { 
+    setDropdownOpen(!dropdownOpen)
+    console.log(dropdownOpen);
+  }
+
+  if (error) {
+    toast(`${error}`)
+  }
+
   return (
     <div>
       <Link
-        onClick={() => setDropdownOpen(!dropdownOpen)}
+        onClick={handleOpenDropdown}
         className="flex items-center gap-4"
         to="#"
       >
         <span className="hidden text-right lg:block">
           <span className="block text-sm font-medium text-black dark:text-white">
-            Thomas Anree
+            {fullName}
           </span>
-          <span className="block text-xs">UX Designer</span>
+          <span className="block text-xs">{role}</span>
         </span>
 
-        <span className="h-12 w-12 rounded-full">
+        <span className="h-12 w-12 rounded-full  flex items-center justify-center">
           {/* <img src={UserOne} alt="User" /> */}
-            <UserIcon className="h-12 w-12 rounded-full"/>
+            <UserIcon className="h-10 w-10 rounded-full"/>
         </span>
 
-        <svg
+        <span>
+          <svg
           className="hidden fill-current sm:block"
           width="12"
           height="8"
@@ -54,6 +68,7 @@ const DropdownUser = () => {
             fill=""
           />
         </svg>
+        </span>
       </Link>
 
       {/* <!-- Dropdown Start --> */}

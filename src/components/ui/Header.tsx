@@ -2,10 +2,12 @@ import { Link } from "react-router-dom";
 import DropdownNotification from "./DropdownNotification";
 import DropdownUser from "./DropdowUser";
 import UserIcon from './User';
+import { IProfile } from "../../data/types";
 
 const Header = (props: {
   sidebarOpen: string | boolean | undefined;
   setSidebarOpen: (arg0: boolean) => void;
+  profile: IProfile
 }) => {
   return (
     <header className="sticky top-0 z-999 flex w-full bg-white drop-shadow-1 dark:bg-boxdark dark:drop-shadow-none">
@@ -111,7 +113,7 @@ const Header = (props: {
           </ul>
 
           {/* <!-- User Area --> */}
-          <DropdownUser />
+          <DropdownUser fullName={props.profile.fullName} role={props.profile.role} />
           {/* <!-- User Area --> */}
         </div>
       </div>

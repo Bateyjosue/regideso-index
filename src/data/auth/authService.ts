@@ -1,4 +1,4 @@
-import supabase from "../data/supabase.d";
+import supabase from "../supabase.d";
 
 /**
  * Signs up a user with the given email and password.
