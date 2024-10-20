@@ -8,6 +8,8 @@ import DirectionLayout from "./components/layout/DirectionLayout";
 import AgentLayout from "./components/layout/AgentLayout";
 import SubscriberLayout from "./components/layout/SubscriberLayout";
 import Dashboard from "./components/ui/Dashboard";
+import Direction from "./components/ui/Direction";
+import { Agency, Avenue } from "./components/pages/direction";
 
 /**
  * The main application component.
@@ -24,8 +26,9 @@ const App:React.FC = ()=> {
         <Route path="/" element={<MainLayout />} errorElement={<ErrorPage />} >
           <Route index element={<Dashboard />} />
           <Route path="/direction" element={<DirectionLayout/>}>
-            <Route path="agency" element={<div>Direction / Agency</div>} />
-            <Route path="avenue" element={<div>Direction / Avenue</div>} />
+            <Route index element={<Direction />} />
+            <Route path="agency" element={<Agency />} />
+            <Route path="avenue" element={<Avenue />} />
           </Route>
           <Route path="/agent" element={<AgentLayout />}>
             <Route path="level" element={<div>Agent Level</div>}/>

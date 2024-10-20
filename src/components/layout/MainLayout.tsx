@@ -78,7 +78,7 @@ const MainLayout: React.FC = () => {
   }, [user?.id]);
 
   if (error) {
-    toast(`${error?.message}`);
+    toast.error(`${error?.message}`);
   }
 
   return (

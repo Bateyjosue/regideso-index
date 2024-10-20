@@ -23,3 +23,11 @@ export interface IProfile{
   fullName: string;
   role: string;
 }
+
+export interface ITableProps {
+  id: string,
+  name: string
+  createdAt: Date,
+  code_direction?: string
+  code_agency?: string
+}

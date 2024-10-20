@@ -76,7 +76,7 @@ const SubscriberIndex = () => {
                 <h5 className="font-medium text-black dark:text-white">
                   {chat.name}
                 </h5>
-              <p className='flex gap-x-4 items-center justify-center border'>
+              <p className='flex gap-x-4 items-center justify-center'>
                   <span className="text-sm text-black dark:text-white">
                     {chat.text}
                   </span>
