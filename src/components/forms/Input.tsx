@@ -3,7 +3,7 @@ interface IAtributeInput {
   type: string;
   placeholder: string;
   label: string;
-  value: string;
+  value: string | null;
   className: string;
   register?: any;
   onChange?: any
