@@ -27,7 +27,14 @@ export interface IProfile{
 export interface ITableProps {
   id: string,
   name: string
-  createdAt: Date,
+  created_at?: Date,
   code_direction?: string
   code_agency?: string
+}
+
+export interface IDirection {
+  id: string,
+  name: string
+  createdAt: Date,
+  updatedAt: Date
 }
