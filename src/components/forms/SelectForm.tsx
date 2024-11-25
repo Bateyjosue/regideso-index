@@ -1,23 +1,25 @@
-import React, { PropsWithChildren, useState } from 'react';
+import React, { ChangeEvent, PropsWithChildren, useState } from 'react';
 
 interface OptionData {
-  id: number;
+  id: string;
   name: string;
 }
 interface SelectFormProps {
   label: string;
   options: OptionData[];
+  onChangeSelect:  any;
+  value?: string | null;
+  register?: any,
+  name?: string
 }
 
-const SelectForm: React.FC<PropsWithChildren<SelectFormProps>> = (props) => {
-  const [selectedOption, setSelectedOption] = useState<string>('');
+const SelectForm: React.FC<PropsWithChildren<SelectFormProps>> = ({ options, label, onChangeSelect, value, register, name } ) => {
+  const [selectedOption, setSelectedOption] = useState<string>(value || '');
   const [isOptionSelected, setIsOptionSelected] = useState<boolean>(false);
 
   const changeTextColor = () => {
     setIsOptionSelected(true);
   };
-
-  const { options, label } = props;
 
   return (
     <div>
@@ -58,23 +60,26 @@ const SelectForm: React.FC<PropsWithChildren<SelectFormProps>> = (props) => {
         </span>
 
         <select
-          value={selectedOption}
+          name={name}
           onChange={(e) => {
+            onChangeSelect(e)
             setSelectedOption(e.target.value);
             changeTextColor();
           }}
+          // value={selectedOption}
+          {...register(label, { required: true })}
           className={`relative z-20 w-full appearance-none rounded border border-stroke bg-transparent py-3 px-12 outline-none transition focus:border-primary active:border-primary dark:border-form-strokedark dark:bg-form-input ${
             isOptionSelected ? 'text-black dark:text-white' : ''
           }`}
         >
-          <option value="" disabled className="text-body dark:text-bodydark">
+          <option value="" disabled className="text-body dark:text-bodydark" defaultChecked>
             Select Direction
           </option>
           {
             options?.map((option) => (
               <option
                 key={option.id}
-                value={option.name}
+                value={option.id}
                 className="text-body dark:text-bodydark"
               >
                 {option.name}

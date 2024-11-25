@@ -2,11 +2,12 @@
 interface IAtributeInput {
   type: string;
   placeholder: string;
-  label: string;
-  value: string | null;
+  label: string | null;
+  value: string;
   className: string;
   register?: any;
-  onChange?: any
+  onChange?: any,
+  name?: string
 }
 const Input: React.FC<IAtributeInput> = ({type, placeholder, label, value, className, register, onChange}) => {
   return (

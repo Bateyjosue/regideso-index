@@ -35,6 +35,14 @@ export interface ITableProps {
 export interface IDirection {
   id: string,
   name: string
-  createdAt: Date,
-  updatedAt: Date
+  created_at: Date,
+  updated_at: Date
+}
+
+export interface IAvenue {
+  id: string,
+  name: string
+  created_at: Date,
+  updated_at: Date
+  code_agency: string
 }
