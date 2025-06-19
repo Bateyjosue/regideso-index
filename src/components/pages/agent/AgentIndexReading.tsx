@@ -38,6 +38,8 @@ const AgentIndexReading = () => {
   const [showScanner, setShowScanner] = useState(false)
   const [selectedSubscriber, setSelectedSubscriber] = useState<ISubscriber | null>(null)
   const [recentReadings, setRecentReadings] = useState<IIndexReading[]>([])
+  const [cameraActive, setCameraActive] = useState(false)
+  const [scanResult, setScanResult] = useState<string | null>(null)
 
   const { register, handleSubmit, setValue, watch, reset, formState: { errors } } = useForm<IIndexReadingInput>()
   
@@ -131,9 +133,49 @@ const AgentIndexReading = () => {
   }
 
   const handleScanComplete = (result: string) => {
-    setSearchQuery(result)
+    setScanResult(result)
     setShowScanner(false)
-    handleSearchSubscriber()
+    
+    // Parse QR code data
+    try {
+      // In a real app, the QR would contain JSON data
+      // For demo, we'll simulate parsing the QR code data
+      const subscriberId = result
+      const subscriber = subscribers.find(s => s.id === subscriberId)
+      
+      if (subscriber) {
+        setSearchQuery(subscriberId)
+        setSelectedSubscriber(subscriber)
+        setValue('subscriberId', subscriber.id)
+        setValue('subscriberName', subscriber.name)
+        setValue('previousReading', subscriber.previousReading)
+        setValue('currentReading', 0)
+        setValue('notes', '')
+        toast.success('Subscriber information loaded from QR code')
+      } else {
+        toast.error('Subscriber not found')
+      }
+    } catch (error) {
+      toast.error('Invalid QR code format')
+    }
+  }
+
+  const startScanner = () => {
+    setShowScanner(true)
+    setCameraActive(true)
+    
+    // In a real implementation, we would initialize the camera here
+    // For demo purposes, we'll simulate scanning after a delay
+    setTimeout(() => {
+      if (Math.random() > 0.3) { // 70% chance of success
+        handleScanComplete('SUB001')
+      }
+    }, 3000)
+  }
+
+  const stopScanner = () => {
+    setShowScanner(false)
+    setCameraActive(false)
   }
 
   const handleSubmitReading: SubmitHandler<IIndexReadingInput> = async (data) => {
@@ -205,7 +247,7 @@ const AgentIndexReading = () => {
             </button>
             
             <button
-              onClick={() => setShowScanner(true)}
+              onClick={startScanner}
               className="bg-gray-600 hover:bg-gray-700 text-white px-4 py-3 rounded-lg font-medium transition-colors"
             >
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -220,9 +262,9 @@ const AgentIndexReading = () => {
           <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
             <div className="bg-white dark:bg-boxdark rounded-xl p-6 max-w-md w-full">
               <div className="flex justify-between items-center mb-4">
-                <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Scan QR Code</h3>
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Scan Subscriber QR Code</h3>
                 <button
-                  onClick={() => setShowScanner(false)}
+                  onClick={stopScanner}
                   className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
                 >
                   <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -231,22 +273,54 @@ const AgentIndexReading = () => {
                 </button>
               </div>
               
-              <div className="bg-gray-100 dark:bg-gray-800 rounded-lg p-4 text-center">
+              <div className="qr-scanner-container mb-4">
+                <div className="qr-scanner-overlay">
+                  <div className="qr-scanner-frame">
+                    <div className="qr-scanner-corners"></div>
+                    <div className="scanning-line"></div>
+                  </div>
+                </div>
+                
+                {/* This would be replaced with actual camera feed in a real implementation */}
+                <div className="absolute inset-0 flex items-center justify-center">
+                  {cameraActive ? (
+                    <div className="text-white text-center">
+                      <div className="animate-pulse mb-2">Scanning...</div>
+                      <div className="text-sm opacity-75">Position the QR code within the frame</div>
+                    </div>
+                  ) : (
+                    <div className="text-white text-center">
+                      <div className="mb-2">Camera initializing...</div>
+                      <div className="text-sm opacity-75">Please allow camera access when prompted</div>
+                    </div>
+                  )}
+                </div>
+              </div>
+              
+              <div className="text-center">
                 <p className="text-gray-600 dark:text-gray-400 mb-4">
-                  Camera access would be requested here to scan QR codes
+                  Scan the QR code on the subscriber's water meter or account card
                 </p>
                 
-                {/* Mock QR code for demo */}
-                <div className="mx-auto w-48 h-48 bg-white p-4 rounded-lg">
+                {/* For demo purposes, we'll show a sample QR code */}
+                <div className="bg-white p-4 rounded-lg inline-block mb-4">
                   <QRCode value="SUB001" size={160} />
                 </div>
                 
-                <button
-                  onClick={() => handleScanComplete('SUB001')}
-                  className="mt-4 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition-colors"
-                >
-                  Simulate Scan
-                </button>
+                <div className="flex justify-center gap-4">
+                  <button
+                    onClick={() => handleScanComplete('SUB001')}
+                    className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition-colors"
+                  >
+                    Simulate Scan
+                  </button>
+                  <button
+                    onClick={stopScanner}
+                    className="bg-gray-300 hover:bg-gray-400 dark:bg-gray-600 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300 px-4 py-2 rounded-lg font-medium transition-colors"
+                  >
+                    Cancel
+                  </button>
+                </div>
               </div>
             </div>
           </div>
