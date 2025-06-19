@@ -2,7 +2,7 @@ import { Link, useNavigate } from "react-router-dom";
 import Breadcrumb from "../../ui/Breadcrumb";
 import { useForm, SubmitHandler } from "react-hook-form"
 import Input from "../../forms/Input";
-import { useEffect, useState } from "react";
+import { useEffect, useState, ChangeEvent } from "react";
 import { login } from "../../../data/auth/authService";
 import { AuthApiError, User } from "@supabase/supabase-js";
 import toast from "react-hot-toast";
@@ -101,18 +101,16 @@ const LoginPage: React.FC = (): JSX.Element => {
     }
   };
 
-  const handleInputChange = (e: Event) => {
-    if (e.target instanceof HTMLInputElement) {
-      switch (e.target.type) {
-        case 'email':
-          setEmail(e.target.value);
-          break;
-        case 'password':
-          setPassword(e.target.value);
-          break;
-        default:
-          break;
-      }
+  const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
+    switch (e.target.type) {
+      case 'email':
+        setEmail(e.target.value);
+        break;
+      case 'password':
+        setPassword(e.target.value);
+        break;
+      default:
+        break;
     }
   }
 
