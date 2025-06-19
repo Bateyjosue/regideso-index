@@ -5,7 +5,7 @@ import { useState, ChangeEvent } from "react";
 import { login } from "../../../data/auth/authService";
 import { AuthApiError } from "@supabase/supabase-js";
 import toast from "react-hot-toast";
-import { FallingLines } from 'react-loader-spinner';
+// import { FallingLines } from 'react-loader-spinner';
 
 interface IFormInput {
   email: string;
@@ -55,6 +55,36 @@ const LoginPage: React.FC = (): JSX.Element => {
         break;
     }
   };
+
+  // Commented out biometric logic that was causing SWC issues
+  /*
+  const [biometricAvailable, setBiometricAvailable] = useState<boolean>(false);
+  const [showBiometric, setShowBiometric] = useState<boolean>(false);
+  
+  useEffect(() => {
+    checkBiometricSupport();
+  }, []);
+
+  const checkBiometricSupport = async () => {
+    if (window.PublicKeyCredential) {
+      try {
+        const available = await PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable();
+        setBiometricAvailable(available);
+        setShowBiometric(available && isMobileDevice());
+      } catch (error) {
+        setBiometricAvailable(false);
+      }
+    }
+  };
+
+  const isMobileDevice = () => {
+    return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+  };
+
+  const handleBiometricLogin = async () => {
+    // Biometric authentication logic
+  };
+  */
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-50 flex items-center justify-center p-4">
@@ -170,7 +200,8 @@ const LoginPage: React.FC = (): JSX.Element => {
                 >
                   {loading ? (
                     <div className="flex items-center justify-center gap-2">
-                      <FallingLines color="#ffffff" width="24" visible={true} />
+                      {/* <FallingLines color="#ffffff" width="24" visible={true} /> */}
+                      <div className="animate-spin w-5 h-5 border-2 border-white border-t-transparent rounded-full"></div>
                       Signing in...
                     </div>
                   ) : (
