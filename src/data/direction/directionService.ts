@@ -1,4 +1,4 @@
-import supabase from "../supabase.d"
+import { supabase } from "../../lib/supabase"
 
 export const getDirections = async () => { 
     const { data, error } = await supabase.from('Direction').select('*')
@@ -23,7 +23,6 @@ export const addDirection = async (name: string) => {
 }
 
 export const addAgency = async (agencydata: IAgency) => {
-
     const { data, error } = await supabase
       .from('Agency')
       .insert({
@@ -32,11 +31,9 @@ export const addAgency = async (agencydata: IAgency) => {
       }).select();
 
     return { data, error };
-  
 }
 
 export const addAvenue = async (avenueData: IAvenue) => {
-
     const { data, error } = await supabase
       .from('Avenue')
       .insert({
