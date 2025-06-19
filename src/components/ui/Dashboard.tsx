@@ -1,112 +1,143 @@
-import CardStats from "./CardStats";
-import SubscriberIndex from "./SubscriberIndex";
-import TopLeaks from "./TopLeaks";
+import { useState, useEffect } from 'react'
+import CardStats from "./CardStats"
+import WaterConsumptionChart from "./charts/WaterConsumptionChart"
+import LeakageMap from "./charts/LeakageMap"
+import RealtimeMetrics from "./charts/RealtimeMetrics"
+import SubscriberGrowthChart from "./charts/SubscriberGrowthChart"
+import TopPerformingAgencies from "./charts/TopPerformingAgencies"
+import WaterQualityIndicator from "./charts/WaterQualityIndicator"
+import AlertsPanel from "./charts/AlertsPanel"
+import QuickActions from "./charts/QuickActions"
 
 const Dashboard = () => {
+  const [realTimeData, setRealTimeData] = useState({
+    totalSubscribers: 10000,
+    activeAgents: 200,
+    currentLeaks: 43,
+    totalAgencies: 56,
+    waterPressure: 85,
+    waterQuality: 92,
+    systemEfficiency: 88
+  })
+
+  // Simulate real-time data updates
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setRealTimeData(prev => ({
+        ...prev,
+        totalSubscribers: prev.totalSubscribers + Math.floor(Math.random() * 3),
+        currentLeaks: Math.max(0, prev.currentLeaks + (Math.random() > 0.7 ? 1 : -1)),
+        waterPressure: Math.max(0, Math.min(100, prev.waterPressure + (Math.random() - 0.5) * 2)),
+        waterQuality: Math.max(0, Math.min(100, prev.waterQuality + (Math.random() - 0.5) * 1)),
+        systemEfficiency: Math.max(0, Math.min(100, prev.systemEfficiency + (Math.random() - 0.5) * 1.5))
+      }))
+    }, 3000)
+
+    return () => clearInterval(interval)
+  }, [])
+
   return (
-    <div className="">
-      <section className="grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-4">
-        <CardStats title="Subscribers" total="10000" rate="58%" levelUp>
-          <svg
-            className="fill-primary dark:fill-white"
-            width="22"
-            height="18"
-            viewBox="0 0 22 18"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M7.18418 8.03751C9.31543 8.03751 11.0686 6.35313 11.0686 4.25626C11.0686 2.15938 9.31543 0.475006 7.18418 0.475006C5.05293 0.475006 3.2998 2.15938 3.2998 4.25626C3.2998 6.35313 5.05293 8.03751 7.18418 8.03751ZM7.18418 2.05626C8.45605 2.05626 9.52168 3.05313 9.52168 4.29063C9.52168 5.52813 8.49043 6.52501 7.18418 6.52501C5.87793 6.52501 4.84668 5.52813 4.84668 4.29063C4.84668 3.05313 5.9123 2.05626 7.18418 2.05626Z"
-              fill=""
-            />
-            <path
-              d="M15.8124 9.6875C17.6687 9.6875 19.1468 8.24375 19.1468 6.42188C19.1468 4.6 17.6343 3.15625 15.8124 3.15625C13.9905 3.15625 12.478 4.6 12.478 6.42188C12.478 8.24375 13.9905 9.6875 15.8124 9.6875ZM15.8124 4.7375C16.8093 4.7375 17.5999 5.49375 17.5999 6.45625C17.5999 7.41875 16.8093 8.175 15.8124 8.175C14.8155 8.175 14.0249 7.41875 14.0249 6.45625C14.0249 5.49375 14.8155 4.7375 15.8124 4.7375Z"
-              fill=""
-            />
-            <path
-              d="M15.9843 10.0313H15.6749C14.6437 10.0313 13.6468 10.3406 12.7874 10.8563C11.8593 9.61876 10.3812 8.79376 8.73115 8.79376H5.67178C2.85303 8.82814 0.618652 11.0625 0.618652 13.8469V16.3219C0.618652 16.975 1.13428 17.4906 1.7874 17.4906H20.2468C20.8999 17.4906 21.4499 16.9406 21.4499 16.2875V15.4625C21.4155 12.4719 18.9749 10.0313 15.9843 10.0313ZM2.16553 15.9438V13.8469C2.16553 11.9219 3.74678 10.3406 5.67178 10.3406H8.73115C10.6562 10.3406 12.2374 11.9219 12.2374 13.8469V15.9438H2.16553V15.9438ZM19.8687 15.9438H13.7499V13.8469C13.7499 13.2969 13.6468 12.7469 13.4749 12.2313C14.0937 11.7844 14.8499 11.5781 15.6405 11.5781H15.9499C18.0812 11.5781 19.8343 13.3313 19.8343 15.4625V15.9438H19.8687Z"
-              fill=""
-            />
-          </svg>
-        </CardStats>
-        <CardStats title="Agents" total="200" rate="88%" levelUp>
-          <svg
-            className="fill-primary dark:fill-white"
-            width="22"
-            height="18"
-            viewBox="0 0 22 18"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M7.18418 8.03751C9.31543 8.03751 11.0686 6.35313 11.0686 4.25626C11.0686 2.15938 9.31543 0.475006 7.18418 0.475006C5.05293 0.475006 3.2998 2.15938 3.2998 4.25626C3.2998 6.35313 5.05293 8.03751 7.18418 8.03751ZM7.18418 2.05626C8.45605 2.05626 9.52168 3.05313 9.52168 4.29063C9.52168 5.52813 8.49043 6.52501 7.18418 6.52501C5.87793 6.52501 4.84668 5.52813 4.84668 4.29063C4.84668 3.05313 5.9123 2.05626 7.18418 2.05626Z"
-              fill=""
-            />
-            <path
-              d="M15.8124 9.6875C17.6687 9.6875 19.1468 8.24375 19.1468 6.42188C19.1468 4.6 17.6343 3.15625 15.8124 3.15625C13.9905 3.15625 12.478 4.6 12.478 6.42188C12.478 8.24375 13.9905 9.6875 15.8124 9.6875ZM15.8124 4.7375C16.8093 4.7375 17.5999 5.49375 17.5999 6.45625C17.5999 7.41875 16.8093 8.175 15.8124 8.175C14.8155 8.175 14.0249 7.41875 14.0249 6.45625C14.0249 5.49375 14.8155 4.7375 15.8124 4.7375Z"
-              fill=""
-            />
-            <path
-              d="M15.9843 10.0313H15.6749C14.6437 10.0313 13.6468 10.3406 12.7874 10.8563C11.8593 9.61876 10.3812 8.79376 8.73115 8.79376H5.67178C2.85303 8.82814 0.618652 11.0625 0.618652 13.8469V16.3219C0.618652 16.975 1.13428 17.4906 1.7874 17.4906H20.2468C20.8999 17.4906 21.4499 16.9406 21.4499 16.2875V15.4625C21.4155 12.4719 18.9749 10.0313 15.9843 10.0313ZM2.16553 15.9438V13.8469C2.16553 11.9219 3.74678 10.3406 5.67178 10.3406H8.73115C10.6562 10.3406 12.2374 11.9219 12.2374 13.8469V15.9438H2.16553V15.9438ZM19.8687 15.9438H13.7499V13.8469C13.7499 13.2969 13.6468 12.7469 13.4749 12.2313C14.0937 11.7844 14.8499 11.5781 15.6405 11.5781H15.9499C18.0812 11.5781 19.8343 13.3313 19.8343 15.4625V15.9438H19.8687Z"
-              fill=""
-            />
-          </svg>
-        </CardStats>
-        <CardStats title="Leaks" total="43" rate="58%" levelUp>
-          <svg
-            className="fill-primary dark:fill-white"
-            width="22"
-            height="18"
-            viewBox="0 0 22 18"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M7.18418 8.03751C9.31543 8.03751 11.0686 6.35313 11.0686 4.25626C11.0686 2.15938 9.31543 0.475006 7.18418 0.475006C5.05293 0.475006 3.2998 2.15938 3.2998 4.25626C3.2998 6.35313 5.05293 8.03751 7.18418 8.03751ZM7.18418 2.05626C8.45605 2.05626 9.52168 3.05313 9.52168 4.29063C9.52168 5.52813 8.49043 6.52501 7.18418 6.52501C5.87793 6.52501 4.84668 5.52813 4.84668 4.29063C4.84668 3.05313 5.9123 2.05626 7.18418 2.05626Z"
-              fill=""
-            />
-            <path
-              d="M15.8124 9.6875C17.6687 9.6875 19.1468 8.24375 19.1468 6.42188C19.1468 4.6 17.6343 3.15625 15.8124 3.15625C13.9905 3.15625 12.478 4.6 12.478 6.42188C12.478 8.24375 13.9905 9.6875 15.8124 9.6875ZM15.8124 4.7375C16.8093 4.7375 17.5999 5.49375 17.5999 6.45625C17.5999 7.41875 16.8093 8.175 15.8124 8.175C14.8155 8.175 14.0249 7.41875 14.0249 6.45625C14.0249 5.49375 14.8155 4.7375 15.8124 4.7375Z"
-              fill=""
-            />
-            <path
-              d="M15.9843 10.0313H15.6749C14.6437 10.0313 13.6468 10.3406 12.7874 10.8563C11.8593 9.61876 10.3812 8.79376 8.73115 8.79376H5.67178C2.85303 8.82814 0.618652 11.0625 0.618652 13.8469V16.3219C0.618652 16.975 1.13428 17.4906 1.7874 17.4906H20.2468C20.8999 17.4906 21.4499 16.9406 21.4499 16.2875V15.4625C21.4155 12.4719 18.9749 10.0313 15.9843 10.0313ZM2.16553 15.9438V13.8469C2.16553 11.9219 3.74678 10.3406 5.67178 10.3406H8.73115C10.6562 10.3406 12.2374 11.9219 12.2374 13.8469V15.9438H2.16553V15.9438ZM19.8687 15.9438H13.7499V13.8469C13.7499 13.2969 13.6468 12.7469 13.4749 12.2313C14.0937 11.7844 14.8499 11.5781 15.6405 11.5781H15.9499C18.0812 11.5781 19.8343 13.3313 19.8343 15.4625V15.9438H19.8687Z"
-              fill=""
-            />
-          </svg>
-        </CardStats>
-        <CardStats title="Agencies" total="56" rate="58%" levelUp>
-          <svg
-            className="fill-primary dark:fill-white"
-            width="22"
-            height="18"
-            viewBox="0 0 22 18"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M7.18418 8.03751C9.31543 8.03751 11.0686 6.35313 11.0686 4.25626C11.0686 2.15938 9.31543 0.475006 7.18418 0.475006C5.05293 0.475006 3.2998 2.15938 3.2998 4.25626C3.2998 6.35313 5.05293 8.03751 7.18418 8.03751ZM7.18418 2.05626C8.45605 2.05626 9.52168 3.05313 9.52168 4.29063C9.52168 5.52813 8.49043 6.52501 7.18418 6.52501C5.87793 6.52501 4.84668 5.52813 4.84668 4.29063C4.84668 3.05313 5.9123 2.05626 7.18418 2.05626Z"
-              fill=""
-            />
-            <path
-              d="M15.8124 9.6875C17.6687 9.6875 19.1468 8.24375 19.1468 6.42188C19.1468 4.6 17.6343 3.15625 15.8124 3.15625C13.9905 3.15625 12.478 4.6 12.478 6.42188C12.478 8.24375 13.9905 9.6875 15.8124 9.6875ZM15.8124 4.7375C16.8093 4.7375 17.5999 5.49375 17.5999 6.45625C17.5999 7.41875 16.8093 8.175 15.8124 8.175C14.8155 8.175 14.0249 7.41875 14.0249 6.45625C14.0249 5.49375 14.8155 4.7375 15.8124 4.7375Z"
-              fill=""
-            />
-            <path
-              d="M15.9843 10.0313H15.6749C14.6437 10.0313 13.6468 10.3406 12.7874 10.8563C11.8593 9.61876 10.3812 8.79376 8.73115 8.79376H5.67178C2.85303 8.82814 0.618652 11.0625 0.618652 13.8469V16.3219C0.618652 16.975 1.13428 17.4906 1.7874 17.4906H20.2468C20.8999 17.4906 21.4499 16.9406 21.4499 16.2875V15.4625C21.4155 12.4719 18.9749 10.0313 15.9843 10.0313ZM2.16553 15.9438V13.8469C2.16553 11.9219 3.74678 10.3406 5.67178 10.3406H8.73115C10.6562 10.3406 12.2374 11.9219 12.2374 13.8469V15.9438H2.16553V15.9438ZM19.8687 15.9438H13.7499V13.8469C13.7499 13.2969 13.6468 12.7469 13.4749 12.2313C14.0937 11.7844 14.8499 11.5781 15.6405 11.5781H15.9499C18.0812 11.5781 19.8343 13.3313 19.8343 15.4625V15.9438H19.8687Z"
-              fill=""
-            />
-          </svg>
-        </CardStats>
-      </section>
-      <section className="mt-4 grid grid-cols-12 gap-4 md:mt-6 md:gap-6 2xl:mt-7.5 2xl:gap-7.5">
-        <div className="col-span-12 xl:col-span-8">
-        <TopLeaks />
+    <div className="space-y-6">
+      {/* Header */}
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+        <div>
+          <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
+            Water Management Dashboard
+          </h1>
+          <p className="text-gray-600 dark:text-gray-400 mt-1">
+            Real-time monitoring and analytics for REGIDESO operations
+          </p>
         </div>
-        <SubscriberIndex />
-      </section>
+        <div className="flex items-center gap-2 text-sm text-gray-500">
+          <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+          Live Data
+        </div>
+      </div>
+
+      {/* Key Metrics Cards */}
+      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-4">
+        <CardStats 
+          title="Total Subscribers" 
+          total={realTimeData.totalSubscribers.toLocaleString()} 
+          rate="+2.5%" 
+          levelUp
+        >
+          <svg className="fill-primary dark:fill-white" width="22" height="18" viewBox="0 0 22 18" fill="none">
+            <path d="M7.18418 8.03751C9.31543 8.03751 11.0686 6.35313 11.0686 4.25626C11.0686 2.15938 9.31543 0.475006 7.18418 0.475006C5.05293 0.475006 3.2998 2.15938 3.2998 4.25626C3.2998 6.35313 5.05293 8.03751 7.18418 8.03751Z" fill=""/>
+            <path d="M15.8124 9.6875C17.6687 9.6875 19.1468 8.24375 19.1468 6.42188C19.1468 4.6 17.6343 3.15625 15.8124 3.15625C13.9905 3.15625 12.478 4.6 12.478 6.42188C12.478 8.24375 13.9905 9.6875 15.8124 9.6875Z" fill=""/>
+          </svg>
+        </CardStats>
+
+        <CardStats 
+          title="Active Agents" 
+          total={realTimeData.activeAgents.toString()} 
+          rate="+12%" 
+          levelUp
+        >
+          <svg className="fill-primary dark:fill-white" width="22" height="18" viewBox="0 0 22 18" fill="none">
+            <path d="M11 9C13.7614 9 16 6.76142 16 4C16 1.23858 13.7614 -1 11 -1C8.23858 -1 6 1.23858 6 4C6 6.76142 8.23858 9 11 9Z" fill=""/>
+            <path d="M11 11C6.58172 11 3 14.5817 3 19H19C19 14.5817 15.4183 11 11 11Z" fill=""/>
+          </svg>
+        </CardStats>
+
+        <CardStats 
+          title="Active Leaks" 
+          total={realTimeData.currentLeaks.toString()} 
+          rate="-8%" 
+          levelDown
+        >
+          <svg className="fill-red-500 dark:fill-red-400" width="22" height="18" viewBox="0 0 22 18" fill="none">
+            <path d="M11 0C7.5 0 4.5 3 4.5 6.5C4.5 10 7.5 13 11 13C14.5 13 17.5 10 17.5 6.5C17.5 3 14.5 0 11 0Z" fill=""/>
+            <path d="M11 15C9.5 15 8.5 16 8.5 17.5C8.5 18.3 9.2 19 10 19H12C12.8 19 13.5 18.3 13.5 17.5C13.5 16 12.5 15 11 15Z" fill=""/>
+          </svg>
+        </CardStats>
+
+        <CardStats 
+          title="System Efficiency" 
+          total={`${realTimeData.systemEfficiency.toFixed(1)}%`} 
+          rate="+3.2%" 
+          levelUp
+        >
+          <svg className="fill-primary dark:fill-white" width="22" height="18" viewBox="0 0 22 18" fill="none">
+            <path d="M11 2L13.09 8.26L20 9L14 14.74L15.18 21.02L11 18.77L6.82 21.02L8 14.74L2 9L8.91 8.26L11 2Z" fill=""/>
+          </svg>
+        </CardStats>
+      </div>
+
+      {/* Real-time Metrics */}
+      <RealtimeMetrics data={realTimeData} />
+
+      {/* Main Charts Grid */}
+      <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
+        {/* Water Consumption Chart - Takes 2 columns */}
+        <div className="xl:col-span-2">
+          <WaterConsumptionChart />
+        </div>
+        
+        {/* Water Quality Indicator */}
+        <div className="xl:col-span-1">
+          <WaterQualityIndicator quality={realTimeData.waterQuality} />
+        </div>
+      </div>
+
+      {/* Secondary Charts Grid */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <SubscriberGrowthChart />
+        <TopPerformingAgencies />
+      </div>
+
+      {/* Map and Alerts */}
+      <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
+        <div className="xl:col-span-2">
+          <LeakageMap />
+        </div>
+        <div className="xl:col-span-1 space-y-6">
+          <AlertsPanel />
+          <QuickActions />
+        </div>
+      </div>
     </div>
   )
 }
 
-export default Dashboard;
+export default Dashboard

@@ -17,7 +17,9 @@
     "@supabase/supabase-js": "^2.45.4",
     "axios": "^1.6.2",
     "chart.js": "^4.4.0",
+    "chartjs-adapter-date-fns": "^3.0.0",
     "classnames": "^2.5.1",
+    "date-fns": "^3.6.0",
     "dotenv": "^16.4.5",
     "flowbite": "^2.0.0",
     "flowbite-react": "^0.6.4",
@@ -35,6 +37,7 @@
     "react-qr-code": "^2.0.12",
     "react-router-dom": "^6.18.0",
     "react-token-auth": "^1.1.7",
+    "recharts": "^2.12.7",
     "swr": "^2.2.4",
     "uninstall": "^0.0.0"
   },
