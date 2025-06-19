@@ -5,7 +5,6 @@ import TableUI from "./Table";
 import { ChangeEvent, useEffect, useState } from "react";
 import Input from "../forms/Input";
 import { addAgency, addAvenue, addDirection, getAgency, getAvenue, getDirections } from "../../data/direction/directionService";
-import { PostgrestError } from "@supabase/supabase-js";
 import { IAvenue, IDirection } from '../../data/types/';
 import toast from "react-hot-toast";
 import { FallingLines } from 'react-loader-spinner';
@@ -30,7 +29,7 @@ const Direction = () => {
   const [agencySelect, setAgencySelect] = useState<string>('');
   const [avenueName, setAvenueName] = useState<string>('');
   const [avenueSelect, setAvenueSelect] = useState<string>('');
-  const [error, setError] = useState<PostgrestError | null>(null);
+  const [error, setError] = useState<any>(null);
   const [directionData, setDirectionData] = useState<IDirection[]>([]);
   const [agencyData, setAgencyData] = useState<IAvenue[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
@@ -162,12 +161,12 @@ const Direction = () => {
   }, []);
 
   const optionsData = directionData.map((direction) => ({ 
-    id: direction.id,
+    id: direction.code_direction,
     name: direction.name,
   }));
 
   const avenueOptions = agencyData.map((agency) => ({
-    id: agency.id,
+    id: agency.code_agency,
     name: agency.name
   }));
 

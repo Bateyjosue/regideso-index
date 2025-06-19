@@ -1,7 +1,6 @@
 import { Link } from "react-router-dom";
 import DropdownNotification from "./DropdownNotification";
 import DropdownUser from "./DropdowUser";
-import UserIcon from './User';
 import { IProfile } from "../../data/types";
 
 const Header = (props: {

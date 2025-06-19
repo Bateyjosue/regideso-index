@@ -1,4 +1,3 @@
-
 export interface IAgent {
   code_agency: number | null
   code_category: number | null
@@ -25,24 +24,26 @@ export interface IProfile{
 }
 
 export interface ITableProps {
-  id: string,
+  id?: string,
+  code_direction?: string,
+  code_agency?: string,
+  code_avenue?: string,
   name: string
-  created_at?: Date,
-  code_direction?: string
-  code_agency?: string
+  created_at?: Date | string,
+  createdAt?: Date | string,
+  updatedAt?: Date | string,
 }
 
 export interface IDirection {
-  id: string,
+  code_direction: string,
   name: string
-  created_at: Date,
-  updated_at: Date
+  createdAt: Date | string,
+  updatedAt: Date | string
 }
 
 export interface IAvenue {
-  id: string,
+  code_agency: string,
   name: string
-  created_at: Date,
-  updated_at: Date
-  code_agency: string
+  createdAt: Date | string,
+  updatedAt: Date | string
 }

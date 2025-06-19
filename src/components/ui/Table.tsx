@@ -1,8 +1,6 @@
 import { PropsWithChildren } from "react";
-import { BRAND } from "../../data/types/brand";
 import { ITableProps } from "../../data/types";
 import classNames from 'classnames';
-
 
 interface ItableProps {
   label?: string
@@ -10,9 +8,8 @@ interface ItableProps {
   loading?: boolean
 }
 
-
 const TableUI: React.FC<PropsWithChildren<ItableProps>> = (props) => {
-  const { label,tableData } = props
+  const { label, tableData } = props
   const TableStyle = classNames({
     'grid  grid-cols-4 rounded-sm bg-gray-2 dark:bg-meta-4 sm:grid-cols-4': !(label === 'Direction'),
     'grid grid-cols-3 rounded-sm bg-gray-2 dark:bg-meta-4 sm:grid-cols-3': label === 'Direction',
@@ -22,8 +19,6 @@ const TableUI: React.FC<PropsWithChildren<ItableProps>> = (props) => {
     'grid grid-cols-4 sm:grid-cols-4': !(label === 'Direction'),
     'grid grid-cols-3 sm:grid-cols-3': label === 'Direction',
   })
-
-  
 
   return (
     <div className="rounded-sm border border-stroke bg-white px-5 pt-6 pb-2.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
@@ -55,7 +50,6 @@ const TableUI: React.FC<PropsWithChildren<ItableProps>> = (props) => {
                   Code {label}
                 </h5>
               </div>
-
             )
           }
         </div>
@@ -72,7 +66,7 @@ const TableUI: React.FC<PropsWithChildren<ItableProps>> = (props) => {
             <div className="flex items-center gap-3 p-2.5 xl:p-5">
               <p className="text-black dark:text-white sm:block">
                 {
-                  (data.id.split('-')[((data.id.split('-'))).length -1]).toUpperCase()
+                  (data.code_direction || data.code_agency || data.code_avenue || data.id)?.split('-')[((data.code_direction || data.code_agency || data.code_avenue || data.id)?.split('-')).length -1]?.toUpperCase()
                 }
               </p>
             </div>
@@ -82,21 +76,22 @@ const TableUI: React.FC<PropsWithChildren<ItableProps>> = (props) => {
             </div>
 
             <div className="flex items-center justify-center p-2.5 xl:p-5">
-              <p className="text-meta-3">{(`${data?.created_at}`).slice(0, 10)}</p>
+              <p className="text-meta-3">{new Date(data.createdAt || data.created_at || '').toLocaleDateString()}</p>
             </div>
           
-            <div className="items-center justify-center p-2.5 sm:flex xl:p-5">
-              <p className="text-black dark:text-white">
-                {
-                  (label === 'Agency')
-                    ? data.code_direction
-                    : (label === 'Avenue')
-                      ? data.code_agency
-                      : ''
-                }
-              </p>
-              
-            </div>
+            {!(label === 'Direction') && (
+              <div className="items-center justify-center p-2.5 sm:flex xl:p-5">
+                <p className="text-black dark:text-white">
+                  {
+                    (label === 'Agency')
+                      ? data.code_direction
+                      : (label === 'Avenue')
+                        ? data.code_agency
+                        : ''
+                  }
+                </p>
+              </div>
+            )}
           </div>
         ))}
       </div>
