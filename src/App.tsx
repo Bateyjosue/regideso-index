@@ -16,6 +16,9 @@ import Agent from "./components/pages/agent/Agent"
 import { Level, Category } from "./components/pages/agent"
 import Subscriber from "./components/pages/subscriber/Subscriber"
 import { Category as SubscriberCategory } from "./components/pages/subscriber"
+import Analytics from "./components/pages/system/Analytics"
+import Reports from "./components/pages/system/Reports"
+import Settings from "./components/pages/system/Settings"
 import { ProtectedRoute } from "./components/auth/ProtectedRoute"
 
 const App: React.FC = () => {
@@ -46,6 +49,9 @@ const App: React.FC = () => {
             <Route index element={<Subscriber />} />
             <Route path="category" element={<SubscriberCategory />}/>
           </Route>
+          <Route path="/analytics" element={<Analytics />} />
+          <Route path="/reports" element={<Reports />} />
+          <Route path="/settings" element={<Settings />} />
         </Route>
         
         <Route path="*" element={<NotFound />}></Route>
