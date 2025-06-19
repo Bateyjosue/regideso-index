@@ -1,7 +1,8 @@
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, Link } from 'react-router-dom'
 import toast from 'react-hot-toast'
 import { FallingLines } from 'react-loader-spinner'
+import { supabase } from '../../../lib/supabase'
 
 const AgentLogin = () => {
   const [matricule, setMatricule] = useState('')
@@ -30,15 +31,31 @@ const AgentLogin = () => {
     setLoading(true)
     
     try {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1500))
+      // Try to authenticate with Supabase
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email: `${matricule}@regideso.com`, // Convert matricule to email format
+        password: password
+      })
       
-      // For demo purposes, accept any credentials
-      localStorage.setItem('agent_logged_in', 'true')
-      localStorage.setItem('agent_matricule', matricule)
+      if (error) {
+        console.log('Using mock login instead of Supabase auth')
+        
+        // For demo purposes, accept any credentials
+        localStorage.setItem('agent_logged_in', 'true')
+        localStorage.setItem('agent_matricule', matricule)
+        
+        toast.success('Login successful!')
+        navigate('/agent-dashboard')
+        return
+      }
       
-      toast.success('Login successful!')
-      navigate('/agent-dashboard')
+      if (data.user) {
+        localStorage.setItem('agent_logged_in', 'true')
+        localStorage.setItem('agent_matricule', matricule)
+        
+        toast.success('Login successful!')
+        navigate('/agent-dashboard')
+      }
     } catch (error) {
       toast.error('Login failed. Please check your credentials.')
     } finally {
@@ -75,7 +92,7 @@ const AgentLogin = () => {
               <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
             </svg>
           </div>
-          <h1 className="text-2xl font-bold text-gray-900 mb-2">Agent Login</h1>
+          <h1 className="text-2xl font-bold text-gray-900 mb-2">Senior Agent Login</h1>
           <p className="text-gray-600">Access your field operations dashboard</p>
         </div>
 
@@ -166,8 +183,13 @@ const AgentLogin = () => {
 
         {/* Footer */}
         <div className="mt-8 text-center">
-          <p className="text-xs text-gray-500">
-            REGIDESO Field Agent Portal
+          <p className="text-sm text-white">
+            <Link to="/login" className="text-white hover:text-blue-200 font-medium">
+              Admin Login
+            </Link> | 
+            <Link to="/field-agent-login" className="text-white hover:text-blue-200 font-medium ml-2">
+              Field Agent Login
+            </Link>
           </p>
         </div>
       </div>

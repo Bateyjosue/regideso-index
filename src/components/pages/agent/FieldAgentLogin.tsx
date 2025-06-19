@@ -1,7 +1,8 @@
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, Link } from 'react-router-dom'
 import toast from 'react-hot-toast'
 import { FallingLines } from 'react-loader-spinner'
+import { supabase } from '../../../lib/supabase'
 
 const FieldAgentLogin = () => {
   const [matricule, setMatricule] = useState('')
@@ -30,16 +31,33 @@ const FieldAgentLogin = () => {
     setLoading(true)
     
     try {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1500))
+      // Try to authenticate with Supabase
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email: `${matricule}@regideso.com`, // Convert matricule to email format
+        password: password
+      })
       
-      // For demo purposes, accept any credentials
-      localStorage.setItem('field_agent_logged_in', 'true')
-      localStorage.setItem('field_agent_matricule', matricule)
+      if (error) {
+        console.log('Using mock login instead of Supabase auth')
+        
+        // For demo purposes, accept any credentials
+        localStorage.setItem('field_agent_logged_in', 'true')
+        localStorage.setItem('field_agent_matricule', matricule)
+        
+        toast.success('Login successful!')
+        navigate('/field-agent-dashboard')
+        return
+      }
       
-      toast.success('Login successful!')
-      navigate('/field-agent-dashboard')
+      if (data.user) {
+        localStorage.setItem('field_agent_logged_in', 'true')
+        localStorage.setItem('field_agent_matricule', matricule)
+        
+        toast.success('Login successful!')
+        navigate('/field-agent-dashboard')
+      }
     } catch (error) {
+      console.error('Login error:', error)
       toast.error('Login failed. Please check your credentials.')
     } finally {
       setLoading(false)
@@ -166,8 +184,13 @@ const FieldAgentLogin = () => {
 
         {/* Footer */}
         <div className="mt-8 text-center">
-          <p className="text-xs text-gray-500">
-            REGIDESO Field Agent Portal
+          <p className="text-sm text-white">
+            <Link to="/login" className="text-white hover:text-blue-200 font-medium">
+              Admin Login
+            </Link> | 
+            <Link to="/agent-login" className="text-white hover:text-blue-200 font-medium ml-2">
+              Senior Agent Login
+            </Link>
           </p>
         </div>
       </div>
