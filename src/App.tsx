@@ -19,6 +19,7 @@ import { Category as SubscriberCategory } from "./components/pages/subscriber"
 import Analytics from "./components/pages/system/Analytics.tsx"
 import Reports from "./components/pages/system/Reports.tsx"
 import Settings from "./components/pages/system/Settings.tsx"
+import Profile from "./components/pages/system/Profile.tsx"
 import { ProtectedRoute } from "./components/auth/ProtectedRoute"
 
 const App: React.FC = () => {
@@ -52,6 +53,7 @@ const App: React.FC = () => {
           <Route path="/analytics" element={<Analytics />} />
           <Route path="/reports" element={<Reports />} />
           <Route path="/settings" element={<Settings />} />
+          <Route path="/profile" element={<Profile />} />
         </Route>
         
         <Route path="*" element={<NotFound />}></Route>

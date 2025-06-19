@@ -138,18 +138,34 @@ export default function DropdownUser({ fullName, role }: DropdownUserProps) {
               </Link>
 
               <Link
-                to="/help"
+                to="/analytics"
+                className="flex items-center gap-3 px-4 py-3 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+                onClick={() => setDropdownOpen(false)}
+              >
+                <div className="w-8 h-8 rounded-lg bg-purple-100 dark:bg-purple-900 flex items-center justify-center">
+                  <svg className="w-4 h-4 text-purple-600 dark:text-purple-400" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M2 11a1 1 0 011-1h2a1 1 0 011 1v5a1 1 0 01-1 1H3a1 1 0 01-1-1v-5zM8 7a1 1 0 011-1h2a1 1 0 011 1v9a1 1 0 01-1 1H9a1 1 0 01-1-1V7zM14 4a1 1 0 011-1h2a1 1 0 011 1v12a1 1 0 01-1 1h-2a1 1 0 01-1-1V4z"/>
+                  </svg>
+                </div>
+                <div>
+                  <div className="font-medium">Analytics</div>
+                  <div className="text-xs text-gray-500 dark:text-gray-400">View insights</div>
+                </div>
+              </Link>
+
+              <Link
+                to="/reports"
                 className="flex items-center gap-3 px-4 py-3 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
                 onClick={() => setDropdownOpen(false)}
               >
                 <div className="w-8 h-8 rounded-lg bg-green-100 dark:bg-green-900 flex items-center justify-center">
                   <svg className="w-4 h-4 text-green-600 dark:text-green-400" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-3a1 1 0 00-.867.5 1 1 0 11-1.731-1A3 3 0 0113 8a3.001 3.001 0 01-2 2.83V11a1 1 0 11-2 0v-1a1 1 0 011-1 1 1 0 100-2zm0 8a1 1 0 100-2 1 1 0 000 2z" clipRule="evenodd" />
+                    <path fillRule="evenodd" d="M4 4a2 2 0 012-2h8a2 2 0 012 2v12a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 0v12h8V4H6z" clipRule="evenodd"/>
                   </svg>
                 </div>
                 <div>
-                  <div className="font-medium">Help & Support</div>
-                  <div className="text-xs text-gray-500 dark:text-gray-400">Get assistance</div>
+                  <div className="font-medium">Reports</div>
+                  <div className="text-xs text-gray-500 dark:text-gray-400">Generate reports</div>
                 </div>
               </Link>
             </div>
