@@ -76,10 +76,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
           <path fillRule="evenodd" d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clipRule="evenodd" />
         </svg>
       ),
-      subItems: [
-        { title: 'Agency', path: '/direction/agency' },
-        { title: 'Avenue', path: '/direction/avenue' }
-      ]
+      isDirectLink: true // This indicates it should navigate directly, not expand
     },
     {
       title: 'Agent',
@@ -89,10 +86,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
           <path d="M9 6a3 3 0 11-6 0 3 3 0 016 0zM17 6a3 3 0 11-6 0 3 3 0 016 0zM12.93 17c.046-.327.07-.66.07-1a6.97 6.97 0 00-1.5-4.33A5 5 0 0119 16v1h-6.07zM6 11a5 5 0 015 5v1H1v-1a5 5 0 015-5z" />
         </svg>
       ),
-      subItems: [
-        { title: 'Level', path: '/agent/level' },
-        { title: 'Category', path: '/agent/category' }
-      ]
+      isDirectLink: true // This indicates it should navigate directly, not expand
     },
     {
       title: 'Subscriber',
@@ -102,9 +96,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
           <path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3z" />
         </svg>
       ),
-      subItems: [
-        { title: 'Category', path: '/subscriber/category' }
-      ]
+      isDirectLink: true // This indicates it should navigate directly, not expand
     }
   ]
 
@@ -227,67 +219,71 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
             </h3>
             <ul className="space-y-1">
               {managementItems.map((item, index) => (
-                <SidebarLinkGroup
-                  key={index}
-                  activeCondition={pathname === item.path || pathname.includes(item.path)}
-                >
-                  {(handleClick, open) => (
-                    <>
-                      <button
-                        onClick={(e) => {
-                          e.preventDefault()
-                          sidebarExpanded ? handleClick() : setSidebarExpanded(true)
-                        }}
-                        className={`group relative flex w-full items-center gap-3 rounded-xl px-3 py-3 font-medium transition-all duration-200 ${
-                          pathname === item.path || pathname.includes(item.path)
+                <li key={index}>
+                  {item.isDirectLink ? (
+                    // Direct navigation link
+                    <NavLink
+                      to={item.path}
+                      className={({ isActive }) =>
+                        `group relative flex items-center gap-3 rounded-xl px-3 py-3 font-medium transition-all duration-200 ${
+                          isActive || pathname.startsWith(item.path)
                             ? 'bg-blue-50 text-blue-700 shadow-sm dark:bg-blue-900/30 dark:text-blue-400'
                             : 'text-gray-700 hover:bg-gray-50 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-gray-700/50 dark:hover:text-white'
-                        }`}
-                      >
-                        <div className={`${pathname === item.path || pathname.includes(item.path) ? 'text-blue-600 dark:text-blue-400' : 'text-gray-400 group-hover:text-gray-600 dark:text-gray-500 dark:group-hover:text-gray-300'}`}>
-                          {item.icon}
-                        </div>
-                        <span className="flex-1 text-left">{item.title}</span>
-                        <svg
-                          className={`h-4 w-4 transition-transform duration-200 ${
-                            open ? 'rotate-180' : ''
-                          } ${pathname === item.path || pathname.includes(item.path) ? 'text-blue-600 dark:text-blue-400' : 'text-gray-400 dark:text-gray-500'}`}
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                        >
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                        </svg>
-                      </button>
-                      
-                      {/* Submenu */}
-                      <div
-                        className={`overflow-hidden transition-all duration-300 ease-in-out ${
-                          open ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
-                        }`}
-                      >
-                        <ul className="mt-2 ml-8 space-y-1">
-                          {item.subItems?.map((subItem, subIndex) => (
-                            <li key={subIndex}>
-                              <NavLink
-                                to={subItem.path}
-                                className={({ isActive }) =>
-                                  `block rounded-lg px-3 py-2 text-sm font-medium transition-all duration-200 ${
-                                    isActive
-                                      ? 'bg-blue-50 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400'
-                                      : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900 dark:text-gray-400 dark:hover:bg-gray-700/50 dark:hover:text-white'
-                                  }`
-                                }
-                              >
-                                {subItem.title}
-                              </NavLink>
-                            </li>
-                          ))}
-                        </ul>
+                        }`
+                      }
+                    >
+                      <div className={`${pathname === item.path || pathname.startsWith(item.path) ? 'text-blue-600 dark:text-blue-400' : 'text-gray-400 group-hover:text-gray-600 dark:text-gray-500 dark:group-hover:text-gray-300'}`}>
+                        {item.icon}
                       </div>
-                    </>
+                      <span className="flex-1 text-left">{item.title}</span>
+                    </NavLink>
+                  ) : (
+                    // Expandable menu group (for future use if needed)
+                    <SidebarLinkGroup
+                      activeCondition={pathname === item.path || pathname.includes(item.path)}
+                    >
+                      {(handleClick, open) => (
+                        <>
+                          <button
+                            onClick={(e) => {
+                              e.preventDefault()
+                              sidebarExpanded ? handleClick() : setSidebarExpanded(true)
+                            }}
+                            className={`group relative flex w-full items-center gap-3 rounded-xl px-3 py-3 font-medium transition-all duration-200 ${
+                              pathname === item.path || pathname.includes(item.path)
+                                ? 'bg-blue-50 text-blue-700 shadow-sm dark:bg-blue-900/30 dark:text-blue-400'
+                                : 'text-gray-700 hover:bg-gray-50 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-gray-700/50 dark:hover:text-white'
+                            }`}
+                          >
+                            <div className={`${pathname === item.path || pathname.includes(item.path) ? 'text-blue-600 dark:text-blue-400' : 'text-gray-400 group-hover:text-gray-600 dark:text-gray-500 dark:group-hover:text-gray-300'}`}>
+                              {item.icon}
+                            </div>
+                            <span className="flex-1 text-left">{item.title}</span>
+                            <svg
+                              className={`h-4 w-4 transition-transform duration-200 ${
+                                open ? 'rotate-180' : ''
+                              } ${pathname === item.path || pathname.includes(item.path) ? 'text-blue-600 dark:text-blue-400' : 'text-gray-400 dark:text-gray-500'}`}
+                              fill="none"
+                              stroke="currentColor"
+                              viewBox="0 0 24 24"
+                            >
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                            </svg>
+                          </button>
+                          
+                          {/* Submenu - This would be used for expandable items */}
+                          <div
+                            className={`overflow-hidden transition-all duration-300 ease-in-out ${
+                              open ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
+                            }`}
+                          >
+                            {/* Submenu items would go here */}
+                          </div>
+                        </>
+                      )}
+                    </SidebarLinkGroup>
                   )}
-                </SidebarLinkGroup>
+                </li>
               ))}
             </ul>
           </div>
