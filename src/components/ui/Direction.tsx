@@ -7,7 +7,6 @@ import Input from "../forms/Input";
 import { addAgency, addAvenue, addDirection, getAgency, getAvenue, getDirections } from "../../data/direction/directionService";
 import { IAvenue, IDirection } from '../../data/types/';
 import toast from "react-hot-toast";
-import { FallingLines } from 'react-loader-spinner';
 
 interface IDirectionInput {
   name: string;
@@ -24,15 +23,17 @@ interface IAvenueInput {
 }
 
 const Direction = () => {
+  const [activeTab, setActiveTab] = useState<'direction' | 'agency' | 'avenue'>('direction');
   const [directionName, setDirectionName] = useState<string>('');
   const [agencyName, setAgencyName] = useState<string>('');
   const [agencySelect, setAgencySelect] = useState<string>('');
   const [avenueName, setAvenueName] = useState<string>('');
   const [avenueSelect, setAvenueSelect] = useState<string>('');
-  const [error, setError] = useState<any>(null);
   const [directionData, setDirectionData] = useState<IDirection[]>([]);
   const [agencyData, setAgencyData] = useState<IAvenue[]>([]);
+  const [avenueData, setAvenueData] = useState<any[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
+  const [showForm, setShowForm] = useState<boolean>(false);
 
   const { register, handleSubmit, formState: { errors }, reset } = useForm<IDirectionInput>();
   const { register: registerAgency, handleSubmit: submitAgency, formState: { errors: errorsAgency }, reset: resetAgency } = useForm<IAgencyInput>();
@@ -44,31 +45,33 @@ const Direction = () => {
       const { data, error } = await addDirection(directionData.name);
       
       if (data) {
-        setLoading(false);
         setDirectionData(prev => [...prev, ...data]);
         setDirectionName('');
+        setShowForm(false);
         reset();
         toast.success('Direction added successfully');
       }
 
       if (error) {
-        setLoading(false);
         throw error;
       }
     } catch (error: any) {
-      setLoading(false);
-      setError(error);
       toast.error(error.message || 'Failed to add direction');
+    } finally {
+      setLoading(false);
     }
   };
 
   const handleSubmitAgency: SubmitHandler<IAgencyInput> = async (agencyData) => {
     try {
+      setLoading(true);
       const { data, error } = await addAgency(agencyData);
       
       if (data) {
+        setAgencyData(prev => [...prev, ...data]);
         setAgencyName('');
         setAgencySelect('');
+        setShowForm(false);
         resetAgency();
         toast.success('Agency added successfully');
       }
@@ -77,18 +80,22 @@ const Direction = () => {
         throw error;
       }
     } catch (error: any) {
-      setError(error);
       toast.error(error.message || 'Failed to add agency');
+    } finally {
+      setLoading(false);
     }
   };
 
   const handleSubmitAvenue: SubmitHandler<IAvenueInput> = async (avenueData) => {
     try {
+      setLoading(true);
       const { data, error } = await addAvenue(avenueData);
       
       if (data) {
+        setAvenueData(prev => [...prev, ...data]);
         setAvenueName('');
         setAvenueSelect('');
+        setShowForm(false);
         resetAvenue();
         toast.success('Avenue added successfully');
       }
@@ -97,221 +104,386 @@ const Direction = () => {
         throw error;
       }
     } catch (error: any) {
-      setError(error);
       toast.error(error.message || 'Failed to add avenue');
+    } finally {
+      setLoading(false);
     }
   };
 
-  const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setDirectionName(e.target.value);
-  };
-
-  const handleInputChangeAgency = (e: ChangeEvent<HTMLInputElement>) => {
-    setAgencyName(e.target.value);
-  };
-
-  const handleInputChangeAvenue = (e: ChangeEvent<HTMLInputElement>) => {
-    setAvenueName(e.target.value);
-  };
-
-  const handleSelectChangeAgency = (e: ChangeEvent<HTMLSelectElement>) => {
-    setAgencySelect(e.target.value);
-  };
-
-  const handleSelectChangeAvenue = (e: ChangeEvent<HTMLSelectElement>) => {
-    setAvenueSelect(e.target.value);
-  };
-
   useEffect(() => { 
-    const fetchDirections = async () => {
+    const fetchData = async () => {
       try {
-        const { data, error } = await getDirections();
-        if (data) {
-          setDirectionData(data);
-        }
-        if (error) {
-          throw error;
-        }
+        const [directionsResult, agenciesResult, avenuesResult] = await Promise.all([
+          getDirections(),
+          getAgency(),
+          getAvenue()
+        ]);
+        
+        if (directionsResult.data) setDirectionData(directionsResult.data);
+        if (agenciesResult.data) setAgencyData(agenciesResult.data);
+        if (avenuesResult.data) setAvenueData(avenuesResult.data);
       } catch (error: any) {
-        setError(error);
-        toast.error(error.message || 'Failed to fetch directions');
+        toast.error('Failed to fetch data');
       }
     };
 
-    fetchDirections();
+    fetchData();
   }, []);
 
-  useEffect(() => { 
-    const fetchAgencies = async () => {
-      try {
-        const { data, error } = await getAgency();
-        if (data) {
-          setAgencyData(data);
-        }
-        if (error) {
-          throw error;
-        }
-      } catch (error: any) {
-        setError(error);
-        toast.error(error.message || 'Failed to fetch agencies');
-      }
-    };
-
-    fetchAgencies();
-  }, []);
-
-  const optionsData = directionData.map((direction) => ({ 
+  const directionOptions = directionData.map((direction) => ({ 
     id: direction.code_direction,
     name: direction.name,
   }));
 
-  const avenueOptions = agencyData.map((agency) => ({
+  const agencyOptions = agencyData.map((agency) => ({
     id: agency.code_agency,
     name: agency.name
   }));
 
+  const getTabContent = () => {
+    switch (activeTab) {
+      case 'direction':
+        return (
+          <div className="space-y-6">
+            {/* Direction Form */}
+            {showForm && (
+              <div className="bg-white dark:bg-boxdark rounded-xl shadow-lg p-6">
+                <div className="flex items-center justify-between mb-6">
+                  <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
+                    Add New Direction
+                  </h2>
+                  <button
+                    onClick={() => setShowForm(false)}
+                    className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
+                  >
+                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                  </button>
+                </div>
+
+                <form onSubmit={handleSubmit(handleSubmitDirection)} className="space-y-6">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                      Direction Name
+                    </label>
+                    <Input
+                      type="text"
+                      placeholder="Enter direction name"
+                      value={directionName}
+                      register={register}
+                      onChange={(e) => setDirectionName(e.target.value)}
+                      name="name"
+                      className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                    />
+                    {errors.name && <p className="mt-1 text-sm text-red-600">Direction name is required</p>}
+                  </div>
+
+                  <div className="flex gap-4">
+                    <button
+                      type="submit"
+                      disabled={loading}
+                      className="bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white px-6 py-3 rounded-lg font-medium transition-colors"
+                    >
+                      {loading ? 'Adding...' : 'Add Direction'}
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setShowForm(false)}
+                      className="bg-gray-300 hover:bg-gray-400 dark:bg-gray-600 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300 px-6 py-3 rounded-lg font-medium transition-colors"
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                </form>
+              </div>
+            )}
+
+            {/* Directions Table */}
+            <div className="bg-white dark:bg-boxdark rounded-xl shadow-lg overflow-hidden">
+              <div className="p-6 border-b border-gray-200 dark:border-gray-700">
+                <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
+                  All Directions
+                </h2>
+              </div>
+              <TableUI label="Direction" tableData={directionData} loading={loading} />
+            </div>
+          </div>
+        );
+
+      case 'agency':
+        return (
+          <div className="space-y-6">
+            {/* Agency Form */}
+            {showForm && (
+              <div className="bg-white dark:bg-boxdark rounded-xl shadow-lg p-6">
+                <div className="flex items-center justify-between mb-6">
+                  <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
+                    Add New Agency
+                  </h2>
+                  <button
+                    onClick={() => setShowForm(false)}
+                    className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
+                  >
+                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                  </button>
+                </div>
+
+                <form onSubmit={submitAgency(handleSubmitAgency)} className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                      Agency Name
+                    </label>
+                    <Input
+                      type="text"
+                      placeholder="Enter agency name"
+                      value={agencyName}
+                      register={registerAgency}
+                      onChange={(e) => setAgencyName(e.target.value)}
+                      name="name"
+                      className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                    />
+                    {errorsAgency.name && <p className="mt-1 text-sm text-red-600">Agency name is required</p>}
+                  </div>
+
+                  <div>
+                    <SelectForm
+                      label="Direction"
+                      options={directionOptions}
+                      onChangeSelect={(e) => setAgencySelect(e.target.value)}
+                      value={agencySelect}
+                      register={registerAgency}
+                      name="code_direction"
+                    />
+                    {errorsAgency.code_direction && <p className="mt-1 text-sm text-red-600">Direction is required</p>}
+                  </div>
+
+                  <div className="md:col-span-2 flex gap-4">
+                    <button
+                      type="submit"
+                      disabled={loading}
+                      className="bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white px-6 py-3 rounded-lg font-medium transition-colors"
+                    >
+                      {loading ? 'Adding...' : 'Add Agency'}
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setShowForm(false)}
+                      className="bg-gray-300 hover:bg-gray-400 dark:bg-gray-600 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300 px-6 py-3 rounded-lg font-medium transition-colors"
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                </form>
+              </div>
+            )}
+
+            {/* Agencies Table */}
+            <div className="bg-white dark:bg-boxdark rounded-xl shadow-lg overflow-hidden">
+              <div className="p-6 border-b border-gray-200 dark:border-gray-700">
+                <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
+                  All Agencies
+                </h2>
+              </div>
+              <TableUI label="Agency" tableData={agencyData} loading={loading} />
+            </div>
+          </div>
+        );
+
+      case 'avenue':
+        return (
+          <div className="space-y-6">
+            {/* Avenue Form */}
+            {showForm && (
+              <div className="bg-white dark:bg-boxdark rounded-xl shadow-lg p-6">
+                <div className="flex items-center justify-between mb-6">
+                  <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
+                    Add New Avenue
+                  </h2>
+                  <button
+                    onClick={() => setShowForm(false)}
+                    className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
+                  >
+                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                  </button>
+                </div>
+
+                <form onSubmit={submitAvenue(handleSubmitAvenue)} className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                      Avenue Name
+                    </label>
+                    <Input
+                      type="text"
+                      placeholder="Enter avenue name"
+                      value={avenueName}
+                      register={registerAvenue}
+                      onChange={(e) => setAvenueName(e.target.value)}
+                      name="name"
+                      className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                    />
+                    {errorsAvenue.name && <p className="mt-1 text-sm text-red-600">Avenue name is required</p>}
+                  </div>
+
+                  <div>
+                    <SelectForm
+                      label="Agency"
+                      options={agencyOptions}
+                      onChangeSelect={(e) => setAvenueSelect(e.target.value)}
+                      value={avenueSelect}
+                      register={registerAvenue}
+                      name="code_agency"
+                    />
+                    {errorsAvenue.code_agency && <p className="mt-1 text-sm text-red-600">Agency is required</p>}
+                  </div>
+
+                  <div className="md:col-span-2 flex gap-4">
+                    <button
+                      type="submit"
+                      disabled={loading}
+                      className="bg-green-600 hover:bg-green-700 disabled:opacity-50 text-white px-6 py-3 rounded-lg font-medium transition-colors"
+                    >
+                      {loading ? 'Adding...' : 'Add Avenue'}
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setShowForm(false)}
+                      className="bg-gray-300 hover:bg-gray-400 dark:bg-gray-600 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300 px-6 py-3 rounded-lg font-medium transition-colors"
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                </form>
+              </div>
+            )}
+
+            {/* Avenues Table */}
+            <div className="bg-white dark:bg-boxdark rounded-xl shadow-lg overflow-hidden">
+              <div className="p-6 border-b border-gray-200 dark:border-gray-700">
+                <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
+                  All Avenues
+                </h2>
+              </div>
+              <TableUI label="Avenue" tableData={avenueData} loading={loading} />
+            </div>
+          </div>
+        );
+
+      default:
+        return null;
+    }
+  };
+
   return (
-    <div className="">
-      <Breadcrumb pageName="Direction" />
+    <div className="space-y-6">
+      <Breadcrumb pageName="Direction Management" />
 
-      <div className="grid grid-cols-1 gap-9 sm:grid-cols-2">
-        <div className="flex flex-col gap-9 border p-4">
-          <h3 className="font-extrabold text-2xl text-black dark:text-white">
-            Direction Information
-          </h3>
-          <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
-            <div className="border-b border-stroke py-4 px-6.5 dark:border-strokedark">
-              <h3 className="font-extrabold text-xl text-black dark:text-white">
-                Direction Creating
-              </h3>
-            </div>
-            <form onSubmit={handleSubmit(handleSubmitDirection)} className="flex flex-col gap-5.5 p-6.5">
-              <div>
-                <label className="mb-3 block text-black dark:text-white">
-                  Name
-                </label>
-                <Input
-                  type="text"
-                  label="name"
-                  placeholder="Direction name"
-                  value={directionName}
-                  register={register}
-                  onChange={handleInputChange}
-                  className="w-full rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
-                />
-                {errors?.name && <p className="mt-1 text-sm text-red-600">Name is required</p>}
-              </div>
-              <div>
-                <button 
-                  type="submit"
-                  disabled={loading}
-                  className="flex w-1/4 justify-center rounded bg-primary p-3 font-medium text-gray hover:bg-opacity-90 disabled:opacity-50"
-                >
-                  {loading ? 'Saving...' : 'Save'}
-                </button>
-              </div>
-            </form>
+      {/* Header Section */}
+      <div className="bg-white dark:bg-boxdark rounded-xl shadow-lg p-6">
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+          <div>
+            <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
+              Direction Management System
+            </h1>
+            <p className="text-gray-600 dark:text-gray-400">
+              Manage directions, agencies, and avenues in the water distribution network
+            </p>
           </div>
+          <button
+            onClick={() => setShowForm(!showForm)}
+            className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition-colors"
+          >
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+            </svg>
+            Add New {activeTab.charAt(0).toUpperCase() + activeTab.slice(1)}
+          </button>
+        </div>
+      </div>
 
-          <TableUI label="Direction" loading={loading} tableData={directionData} />
+      {/* Stats Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="bg-white dark:bg-boxdark rounded-xl shadow-lg p-6">
+          <div className="flex items-center gap-4">
+            <div className="w-12 h-12 bg-blue-100 dark:bg-blue-900/30 rounded-lg flex items-center justify-center">
+              <svg className="w-6 h-6 text-blue-600 dark:text-blue-400" fill="currentColor" viewBox="0 0 20 20">
+                <path fillRule="evenodd" d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clipRule="evenodd"/>
+              </svg>
+            </div>
+            <div>
+              <p className="text-2xl font-bold text-gray-900 dark:text-white">{directionData.length}</p>
+              <p className="text-gray-600 dark:text-gray-400 text-sm">Total Directions</p>
+            </div>
+          </div>
         </div>
 
-        <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark h-fit">
-          <div className="border-b border-stroke py-4 px-6.5 dark:border-strokedark">
-            <h3 className="font-extrabold text-2xl text-black dark:text-white">
-              Agency Information
-              {loading && (
-                <FallingLines
-                  color="#4fa94d"
-                  width="100"
-                  visible={true}
-                />
-              )}
-            </h3>
+        <div className="bg-white dark:bg-boxdark rounded-xl shadow-lg p-6">
+          <div className="flex items-center gap-4">
+            <div className="w-12 h-12 bg-green-100 dark:bg-green-900/30 rounded-lg flex items-center justify-center">
+              <svg className="w-6 h-6 text-green-600 dark:text-green-400" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M4 4a2 2 0 00-2 2v1h16V6a2 2 0 00-2-2H4z"/>
+                <path fillRule="evenodd" d="M18 9H2v5a2 2 0 002 2h12a2 2 0 002-2V9zM4 13a1 1 0 011-1h1a1 1 0 110 2H5a1 1 0 01-1-1zm5-1a1 1 0 100 2h1a1 1 0 100-2H9z" clipRule="evenodd"/>
+              </svg>
+            </div>
+            <div>
+              <p className="text-2xl font-bold text-gray-900 dark:text-white">{agencyData.length}</p>
+              <p className="text-gray-600 dark:text-gray-400 text-sm">Total Agencies</p>
+            </div>
           </div>
-          <form onSubmit={submitAgency(handleSubmitAgency)} className="flex flex-col gap-5.5 p-6.5">
-            <div>
-              <label className="mb-3 block text-black dark:text-white">
-                Name
-              </label>
-              <Input
-                type="text"
-                label="name"
-                name="name"
-                value={agencyName}
-                placeholder="Agency name"
-                register={registerAgency}
-                onChange={handleInputChangeAgency}
-                className="w-full rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
-              />
-              {errorsAgency.name && <p className="mt-1 text-sm text-red-600">Name is required</p>}
-            </div>
-            <div>
-              <SelectForm
-                onChangeSelect={handleSelectChangeAgency}
-                label="Direction"
-                options={optionsData}
-                value={agencySelect}
-                register={registerAgency}
-                name="code_direction"
-              />
-              {errorsAgency.code_direction && <p className="mt-1 text-sm text-red-600">Direction is required</p>}
-            </div>
-            <div>
-              <button 
-                type="submit"
-                className="flex w-1/4 justify-center rounded bg-primary p-3 font-medium text-gray hover:bg-opacity-90"
-              >
-                Save
-              </button>
-            </div>
-          </form>
         </div>
 
-        <form onSubmit={submitAvenue(handleSubmitAvenue)} className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
-          <div className="border-b border-stroke py-4 px-6.5 dark:border-strokedark">
-            <h3 className="font-extrabold text-2xl text-black dark:text-white">
-              Avenue Information
-            </h3>
+        <div className="bg-white dark:bg-boxdark rounded-xl shadow-lg p-6">
+          <div className="flex items-center gap-4">
+            <div className="w-12 h-12 bg-purple-100 dark:bg-purple-900/30 rounded-lg flex items-center justify-center">
+              <svg className="w-6 h-6 text-purple-600 dark:text-purple-400" fill="currentColor" viewBox="0 0 20 20">
+                <path fillRule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clipRule="evenodd"/>
+              </svg>
+            </div>
+            <div>
+              <p className="text-2xl font-bold text-gray-900 dark:text-white">{avenueData.length}</p>
+              <p className="text-gray-600 dark:text-gray-400 text-sm">Total Avenues</p>
+            </div>
           </div>
-          <div className="flex flex-col gap-5.5 p-6.5">
-            <div>
-              <label className="mb-3 block text-black dark:text-white">
-                Name
-              </label>
-              <Input
-                type="text"
-                label="name"
-                name="name"
-                value={avenueName}
-                placeholder="Avenue name"
-                register={registerAvenue}
-                onChange={handleInputChangeAvenue}
-                className="w-full rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
-              />
-              {errorsAvenue.name && <p className="mt-1 text-sm text-red-600">Name is required</p>}
-            </div>
-            <div>
-              <SelectForm
-                onChangeSelect={handleSelectChangeAvenue}
-                label="Agency"
-                options={avenueOptions}
-                value={avenueSelect}
-                register={registerAvenue}
-                name="code_agency"
-              />
-              {errorsAvenue.code_agency && <p className="mt-1 text-sm text-red-600">Agency is required</p>}
-            </div>
-            <div>
-              <button 
-                type="submit"
-                className="flex w-1/4 justify-center rounded bg-primary p-3 font-medium text-gray hover:bg-opacity-90"
+        </div>
+      </div>
+
+      {/* Tab Navigation */}
+      <div className="bg-white dark:bg-boxdark rounded-xl shadow-lg overflow-hidden">
+        <div className="border-b border-gray-200 dark:border-gray-700">
+          <nav className="flex space-x-8 px-6" aria-label="Tabs">
+            {[
+              { key: 'direction', label: 'Directions', icon: '🏢' },
+              { key: 'agency', label: 'Agencies', icon: '🏛️' },
+              { key: 'avenue', label: 'Avenues', icon: '🛣️' }
+            ].map((tab) => (
+              <button
+                key={tab.key}
+                onClick={() => {
+                  setActiveTab(tab.key as any);
+                  setShowForm(false);
+                }}
+                className={`py-4 px-1 border-b-2 font-medium text-sm transition-colors ${
+                  activeTab === tab.key
+                    ? 'border-blue-500 text-blue-600 dark:text-blue-400'
+                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 dark:text-gray-400 dark:hover:text-gray-300'
+                }`}
               >
-                Save
+                <span className="flex items-center gap-2">
+                  <span>{tab.icon}</span>
+                  {tab.label}
+                </span>
               </button>
-            </div>
-          </div>
-        </form>
+            ))}
+          </nav>
+        </div>
+
+        <div className="p-6">
+          {getTabContent()}
+        </div>
       </div>
     </div>
   );

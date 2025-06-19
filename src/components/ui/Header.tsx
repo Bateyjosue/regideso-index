@@ -69,21 +69,6 @@ const Header = ({ sidebarOpen, setSidebarOpen, profile }: HeaderProps) => {
           </Link>
         </div>
 
-        {/* Logo for desktop */}
-        <div className="hidden lg:block">
-          <Link to="/" className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center shadow-lg">
-              <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
-              </svg>
-            </div>
-            <div>
-              <h1 className="text-xl font-bold text-gray-900 dark:text-white">REGIDESO</h1>
-              <p className="text-xs text-gray-600 dark:text-gray-400">Water Management</p>
-            </div>
-          </Link>
-        </div>
-
         {/* Search Bar */}
         <div className="hidden sm:block flex-1 max-w-md mx-8">
           <form className="relative">
