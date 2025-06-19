@@ -3,6 +3,8 @@ import ErrorPage from "./components/Error/ErrorPage"
 import { Toaster } from 'react-hot-toast';
 import MainLayout from "./components/layout/MainLayout";
 import LoginPage from "./components/pages/auth/Login";
+import BiometricSetup from "./components/pages/auth/BiometricSetup";
+import AgentMobileLogin from "./components/pages/auth/AgentMobileLogin";
 import NotFound from "./components/pages/NotFound";
 import DirectionLayout from "./components/layout/DirectionLayout";
 import AgentLayout from "./components/layout/AgentLayout";
@@ -38,15 +40,38 @@ const App:React.FC = ()=> {
             <Route path="category" element={<div>Subscriber Category</div>}/>
           </Route>
         </Route>
-      <Route path="/login" element={<LoginPage />} errorElement={<ErrorPage />} />
-      <Route path="*" element={<NotFound />}></Route>
+        <Route path="/login" element={<LoginPage />} errorElement={<ErrorPage />} />
+        <Route path="/biometric-setup" element={<BiometricSetup />} errorElement={<ErrorPage />} />
+        <Route path="/agent-login" element={<AgentMobileLogin />} errorElement={<ErrorPage />} />
+        <Route path="*" element={<NotFound />}></Route>
       </Route>
     )
   )
 
   return (
     <>
-      <Toaster/>
+      <Toaster
+        position="top-right"
+        toastOptions={{
+          duration: 4000,
+          style: {
+            background: '#363636',
+            color: '#fff',
+          },
+          success: {
+            duration: 3000,
+            style: {
+              background: '#10B981',
+            },
+          },
+          error: {
+            duration: 4000,
+            style: {
+              background: '#EF4444',
+            },
+          },
+        }}
+      />
       <RouterProvider router={router} />
     </>
   )
