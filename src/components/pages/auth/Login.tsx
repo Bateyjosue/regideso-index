@@ -161,9 +161,9 @@ export default function LoginPage() {
 
               <div className="mt-8 text-center">
                 <p className="text-sm text-gray-600">
-                  Need help? {' '}
-                  <Link to="/contact" className="text-blue-600 hover:text-blue-700 font-medium">
-                    Contact Administrator
+                  Are you a field agent?{' '}
+                  <Link to="/field-agent-login" className="text-blue-600 hover:text-blue-700 font-medium">
+                    Login here
                   </Link>
                 </p>
               </div>

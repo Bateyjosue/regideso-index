@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import toast from 'react-hot-toast'
 import QrScanner from 'qr-scanner'
+import { supabase } from '../../../lib/supabase'
 
 interface ISubscriber {
   id: string
@@ -149,6 +150,24 @@ const FieldAgentDashboard = () => {
       }
     ]
     setRecentLeaks(mockLeaks)
+
+    // Try to fetch data from Supabase
+    const fetchData = async () => {
+      try {
+        // This is just a test to see if Supabase is connected
+        const { data, error } = await supabase.from('Direction').select('*').limit(1)
+        if (data && data.length > 0) {
+          console.log('Supabase connection successful:', data)
+        }
+        if (error) {
+          console.error('Supabase error:', error)
+        }
+      } catch (err) {
+        console.error('Error fetching from Supabase:', err)
+      }
+    }
+
+    fetchData()
 
     return () => {
       // Clean up QR scanner if it exists
@@ -340,6 +359,13 @@ const FieldAgentDashboard = () => {
       )
     )
     toast.success(`Task marked as ${status}`)
+  }
+
+  const handleSignOut = () => {
+    localStorage.removeItem('field_agent_logged_in')
+    localStorage.removeItem('field_agent_matricule')
+    navigate('/field-agent-login')
+    toast.success('Signed out successfully')
   }
 
   const getSeverityColor = (severity: string) => {
@@ -861,7 +887,7 @@ const FieldAgentDashboard = () => {
           </div>
           
           <button
-            onClick={() => navigate('/login')}
+            onClick={handleSignOut}
             className="inline-flex items-center gap-2 bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg font-medium transition-colors"
           >
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
