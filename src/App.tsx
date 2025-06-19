@@ -13,7 +13,7 @@ import Dashboard from "./components/ui/Dashboard"
 import Direction from "./components/ui/Direction"
 import { Agency, Avenue } from "./components/pages/direction"
 import Agent from "./components/pages/agent/Agent"
-import { Level, Category, AgentDashboard, AgentLogin, AgentProtectedRoute } from "./components/pages/agent"
+import { Level, Category, AgentDashboard, AgentLogin, AgentProtectedRoute, FieldAgentDashboard, FieldAgentLogin, FieldAgentProtectedRoute } from "./components/pages/agent"
 import Subscriber from "./components/pages/subscriber/Subscriber"
 import { Category as SubscriberCategory } from "./components/pages/subscriber"
 import Analytics from "./components/pages/system/Analytics"
@@ -29,12 +29,19 @@ const App: React.FC = () => {
         <Route path="/login" element={<LoginPage />} errorElement={<ErrorPage />} />
         <Route path="/biometric-setup" element={<BiometricSetup />} errorElement={<ErrorPage />} />
         <Route path="/agent-login" element={<AgentLogin />} errorElement={<ErrorPage />} />
+        <Route path="/field-agent-login" element={<FieldAgentLogin />} errorElement={<ErrorPage />} />
         <Route path="/agent-mobile-login" element={<AgentMobileLogin />} errorElement={<ErrorPage />} />
         
         <Route path="/agent-dashboard" element={
           <AgentProtectedRoute>
             <AgentDashboard />
           </AgentProtectedRoute>
+        } errorElement={<ErrorPage />} />
+        
+        <Route path="/field-agent-dashboard" element={
+          <FieldAgentProtectedRoute>
+            <FieldAgentDashboard />
+          </FieldAgentProtectedRoute>
         } errorElement={<ErrorPage />} />
         
         <Route path="/" element={

@@ -4,6 +4,9 @@ import Agent from './Agent';
 import AgentDashboard from './AgentDashboard';
 import AgentLogin from './AgentLogin';
 import { AgentProtectedRoute } from './AgentProtectedRoute';
+import FieldAgentDashboard from './FieldAgentDashboard';
+import FieldAgentLogin from './FieldAgentLogin';
+import { FieldAgentProtectedRoute } from './FieldAgentProtectedRoute';
 
 export {
   Level,
@@ -11,5 +14,8 @@ export {
   Agent,
   AgentDashboard,
   AgentLogin,
-  AgentProtectedRoute
+  AgentProtectedRoute,
+  FieldAgentDashboard,
+  FieldAgentLogin,
+  FieldAgentProtectedRoute
 };

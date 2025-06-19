@@ -52,7 +52,7 @@ const AgentMobileLogin: React.FC = () => {
       if (credential) {
         localStorage.setItem('lastAgentLogin', new Date().toISOString());
         toast.success('Welcome back, Agent!');
-        navigate('/agent-dashboard');
+        navigate('/field-agent-dashboard');
       }
     } catch (error) {
       toast.error('Authentication failed. Please try again.');
@@ -62,8 +62,8 @@ const AgentMobileLogin: React.FC = () => {
   };
 
   const handleEmergencyAccess = () => {
-    // Redirect to agent login page instead of the admin login
-    navigate('/agent-login');
+    // Redirect to field agent login page instead of the admin login
+    navigate('/field-agent-login');
   };
 
   return (
@@ -76,7 +76,7 @@ const AgentMobileLogin: React.FC = () => {
               <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
             </svg>
           </div>
-          <h1 className="text-2xl font-bold text-gray-900 mb-2">Agent Access</h1>
+          <h1 className="text-2xl font-bold text-gray-900 mb-2">Field Agent Access</h1>
           <p className="text-gray-600">Secure field authentication</p>
         </div>
 
