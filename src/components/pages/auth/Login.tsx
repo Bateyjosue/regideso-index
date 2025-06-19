@@ -23,8 +23,7 @@ const LoginPage: React.FC = (): JSX.Element => {
   const [biometricSupported, setBiometricSupported] = useState<boolean>(false);
   
   const navigate = useNavigate();
-    
-}
+  
   const { register, formState: { errors }, handleSubmit } = useForm<IFormInput>();
 
   // Check if device is mobile and supports biometrics
