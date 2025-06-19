@@ -11,8 +11,11 @@ import AgentLayout from "./components/layout/AgentLayout"
 import SubscriberLayout from "./components/layout/SubscriberLayout"
 import Dashboard from "./components/ui/Dashboard"
 import Direction from "./components/ui/Direction"
+import { Agency, Avenue } from "./components/pages/direction"
 import Agent from "./components/pages/agent/Agent"
+import { Level, Category } from "./components/pages/agent"
 import Subscriber from "./components/pages/subscriber/Subscriber"
+import { Category as SubscriberCategory } from "./components/pages/subscriber"
 import { ProtectedRoute } from "./components/auth/ProtectedRoute"
 
 const App: React.FC = () => {
@@ -31,12 +34,17 @@ const App: React.FC = () => {
           <Route index element={<Dashboard />} />
           <Route path="/direction" element={<DirectionLayout/>}>
             <Route index element={<Direction />} />
+            <Route path="agency" element={<Agency />} />
+            <Route path="avenue" element={<Avenue />} />
           </Route>
           <Route path="/agent" element={<AgentLayout />}>
             <Route index element={<Agent />} />
+            <Route path="level" element={<Level />}/>
+            <Route path="category" element={<Category />}/>
           </Route>
           <Route path="/subscriber" element={<SubscriberLayout />}>
             <Route index element={<Subscriber />} />
+            <Route path="category" element={<SubscriberCategory />}/>
           </Route>
         </Route>
         
