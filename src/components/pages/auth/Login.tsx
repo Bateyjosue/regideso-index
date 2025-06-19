@@ -6,7 +6,7 @@ import { login } from "../../../data/auth/authService";
 import { AuthApiError } from "@supabase/supabase-js";
 import toast from "react-hot-toast";
 import { FallingLines } from 'react-loader-spinner';
-import { BiometricAuth } from '../../../utils/biometric';
+import biometricAuth from '../../../utils/biometric';
 
 interface IFormInput {
   email: string;
@@ -23,7 +23,6 @@ const LoginPage: React.FC = (): JSX.Element => {
   const [biometricSupported, setBiometricSupported] = useState<boolean>(false);
   
   const navigate = useNavigate();
-  const biometricAuth = new BiometricAuth();
     
   const { register, formState: { errors }, handleSubmit } = useForm<IFormInput>();
 

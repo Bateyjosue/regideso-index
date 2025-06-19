@@ -9,7 +9,7 @@ export interface BiometricCredential {
   lastUsed?: Date;
 }
 
-export class BiometricAuth {
+class BiometricAuth {
   private static instance: BiometricAuth;
   
   private constructor() {}
@@ -101,11 +101,11 @@ export class BiometricAuth {
   /**
    * Authenticate using biometric
    */
-  async authenticate(): Promise<boolean> {
+  async authenticate(): Promise<{ success: boolean; error?: string }> {
     try {
       const credentials = this.getStoredCredentials();
       if (credentials.length === 0) {
-        throw new Error('No biometric credentials found');
+        return { success: false, error: 'No biometric credentials found' };
       }
 
       const challenge = new Uint8Array(32);
@@ -127,13 +127,13 @@ export class BiometricAuth {
       if (assertion) {
         // Update last used timestamp
         this.updateLastUsed(assertion.id);
-        return true;
+        return { success: true };
       }
       
-      return false;
+      return { success: false, error: 'Authentication failed' };
     } catch (error) {
       console.error('Biometric authentication failed:', error);
-      throw new Error('Authentication failed');
+      return { success: false, error: 'Authentication failed' };
     }
   }
 
