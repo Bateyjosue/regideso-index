@@ -62,7 +62,8 @@ const AgentMobileLogin: React.FC = () => {
   };
 
   const handleEmergencyAccess = () => {
-    navigate('/login?type=agent&emergency=true');
+    // Redirect to agent login page instead of the admin login
+    navigate('/agent-login');
   };
 
   return (
