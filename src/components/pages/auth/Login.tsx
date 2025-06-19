@@ -6,6 +6,7 @@ import { login } from "../../../data/auth/authService";
 import { AuthApiError } from "@supabase/supabase-js";
 import toast from "react-hot-toast";
 import { FallingLines } from 'react-loader-spinner';
+import { BiometricAuth } from '../../../utils/biometric';
 
 interface IFormInput {
   email: string;
@@ -22,19 +23,19 @@ const LoginPage: React.FC = (): JSX.Element => {
   const [biometricSupported, setBiometricSupported] = useState<boolean>(false);
   
   const navigate = useNavigate();
+  const biometricAuth = new BiometricAuth();
     
   const { register, formState: { errors }, handleSubmit } = useForm<IFormInput>();
 
   // Check if device is mobile and supports biometrics
   useEffect(() => {
-    const checkMobileAndBiometrics = () => {
+    const checkMobileAndBiometrics = async () => {
       const isMobileDevice = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
       setIsMobile(isMobileDevice);
       
-      // Check for biometric support (WebAuthn API)
-      if (window.PublicKeyCredential) {
-        setBiometricSupported(true);
-      }
+      // Use the BiometricAuth utility to check support
+      const isSupported = await biometricAuth.isSupported();
+      setBiometricSupported(isSupported);
     };
     
     checkMobileAndBiometrics();
@@ -70,28 +71,14 @@ const LoginPage: React.FC = (): JSX.Element => {
         return;
       }
 
-      // Simulate biometric authentication
-      // In a real app, you'd use WebAuthn API or a biometric library
-      const credential = await navigator.credentials.create({
-        publicKey: {
-          challenge: new Uint8Array(32),
-          rp: { name: "Regideso" },
-          user: {
-            id: new Uint8Array(16),
-            name: "agent@regideso.com",
-            displayName: "Agent"
-          },
-          pubKeyCredParams: [{ alg: -7, type: "public-key" }],
-          authenticatorSelection: {
-            authenticatorAttachment: "platform",
-            userVerification: "required"
-          }
-        }
-      });
-
-      if (credential) {
+      // Use the BiometricAuth utility for authentication
+      const result = await biometricAuth.authenticate();
+      
+      if (result.success) {
         toast.success('Biometric authentication successful!');
         navigate('/');
+      } else {
+        toast.error(result.error || 'Biometric authentication failed');
       }
     } catch (error) {
       toast.error('Biometric authentication failed');
