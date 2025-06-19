@@ -1,10 +1,9 @@
 import { Link, useNavigate } from "react-router-dom";
-import Breadcrumb from "../../ui/Breadcrumb";
-import { useForm, SubmitHandler } from "react-hook-form"
+import { useForm, SubmitHandler } from "react-hook-form";
 import Input from "../../forms/Input";
 import { useEffect, useState, ChangeEvent } from "react";
 import { login } from "../../../data/auth/authService";
-import { AuthApiError, User } from "@supabase/supabase-js";
+import { AuthApiError } from "@supabase/supabase-js";
 import toast from "react-hot-toast";
 import { FallingLines } from 'react-loader-spinner';
 
@@ -14,17 +13,17 @@ interface IFormInput {
 }
 
 const LoginPage: React.FC = (): JSX.Element => {
-  const [email, setEmail] = useState<string>('')
-  const [password, setPassword] = useState<string>('')
-  const [error, setError] = useState<AuthApiError | null>(null)
-  const [loading, setLoading] = useState<boolean>(false)
-  const [loginType, setLoginType] = useState<'admin' | 'agent'>('admin')
-  const [isMobile, setIsMobile] = useState<boolean>(false)
-  const [biometricSupported, setBiometricSupported] = useState<boolean>(false)
+  const [email, setEmail] = useState<string>('');
+  const [password, setPassword] = useState<string>('');
+  const [error, setError] = useState<AuthApiError | null>(null);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [loginType, setLoginType] = useState<'admin' | 'agent'>('admin');
+  const [isMobile, setIsMobile] = useState<boolean>(false);
+  const [biometricSupported, setBiometricSupported] = useState<boolean>(false);
   
-  const navigate = useNavigate()
+  const navigate = useNavigate();
     
-  const { register, formState:{errors}, handleSubmit } = useForm<IFormInput>()
+  const { register, formState: { errors }, handleSubmit } = useForm<IFormInput>();
 
   // Check if device is mobile and supports biometrics
   useEffect(() => {
@@ -54,13 +53,13 @@ const LoginPage: React.FC = (): JSX.Element => {
         toast.success('Login successful!');
         return navigate('/');
       } 
-    } catch (error: AuthApiError | any) {
+    } catch (error: any) {
       setError(error);
       toast.error(error.message || 'Login failed');
     } finally {
       setLoading(false);
     }
-  }
+  };
 
   const handleBiometricLogin = async () => {
     try {
@@ -112,7 +111,7 @@ const LoginPage: React.FC = (): JSX.Element => {
       default:
         break;
     }
-  }
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-50 flex items-center justify-center p-4">
@@ -122,7 +121,7 @@ const LoginPage: React.FC = (): JSX.Element => {
           <div className="lg:w-1/2 bg-gradient-to-br from-blue-600 via-blue-700 to-blue-800 p-8 lg:p-12 flex flex-col justify-center items-center text-white relative overflow-hidden">
             {/* Background Pattern */}
             <div className="absolute inset-0 opacity-10">
-              <div className="absolute top-0 left-0 w-full h-full bg-[url('data:image/svg+xml,%3Csvg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"%3E%3Cg fill="none" fill-rule="evenodd"%3E%3Cg fill="%23ffffff" fill-opacity="0.1"%3E%3Ccircle cx="30" cy="30" r="4"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')]"></div>
+              <div className="absolute top-0 left-0 w-full h-full bg-[url('data:image/svg+xml,%3Csvg width=\"60\" height=\"60\" viewBox=\"0 0 60 60\" xmlns=\"http://www.w3.org/2000/svg\"%3E%3Cg fill=\"none\" fill-rule=\"evenodd\"%3E%3Cg fill=\"%23ffffff\" fill-opacity=\"0.1\"%3E%3Ccircle cx=\"30\" cy=\"30\" r=\"4\"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')]"></div>
             </div>
             
             <div className="relative z-10 text-center">
@@ -246,7 +245,6 @@ const LoginPage: React.FC = (): JSX.Element => {
                   <div className="relative">
                     <Input
                       type="email"
-                      name="email"
                       placeholder="Enter your email"
                       className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 pl-12"
                       label="email"
@@ -268,7 +266,6 @@ const LoginPage: React.FC = (): JSX.Element => {
                   <div className="relative">
                     <Input
                       type="password"
-                      name="password"
                       placeholder="Enter your password"
                       className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 pl-12"
                       label="password"
@@ -348,7 +345,7 @@ const LoginPage: React.FC = (): JSX.Element => {
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
 export default LoginPage;
