@@ -16,6 +16,7 @@ interface SelectFormProps {
 const SelectForm: React.FC<PropsWithChildren<SelectFormProps>> = ({ options, label, onChangeSelect, value, register, name } ) => {
   const [selectedOption, setSelectedOption] = useState<string>(value || '');
   const [isOptionSelected, setIsOptionSelected] = useState<boolean>(false);
+  const fieldName = name || label || '';
 
   const changeTextColor = () => {
     setIsOptionSelected(true);
@@ -60,14 +61,14 @@ const SelectForm: React.FC<PropsWithChildren<SelectFormProps>> = ({ options, lab
         </span>
 
         <select
-          name={name}
+          name={fieldName}
           onChange={(e) => {
             onChangeSelect(e)
             setSelectedOption(e.target.value);
             changeTextColor();
           }}
           // value={selectedOption}
-          {...register(label, { required: true })}
+          {...(register && fieldName ? register(fieldName, { required: true }) : {})}
           className={`relative z-20 w-full appearance-none rounded border border-stroke bg-transparent py-3 px-12 outline-none transition focus:border-primary active:border-primary dark:border-form-strokedark dark:bg-form-input ${
             isOptionSelected ? 'text-black dark:text-white' : ''
           }`}
