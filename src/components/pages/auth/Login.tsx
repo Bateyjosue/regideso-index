@@ -246,6 +246,7 @@ const LoginPage: React.FC = (): JSX.Element => {
                   <div className="relative">
                     <Input
                       type="email"
+                      name="email"
                       placeholder="Enter your email"
                       className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 pl-12"
                       label="email"
@@ -267,6 +268,7 @@ const LoginPage: React.FC = (): JSX.Element => {
                   <div className="relative">
                     <Input
                       type="password"
+                      name="password"
                       placeholder="Enter your password"
                       className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 pl-12"
                       label="password"
