@@ -35,7 +35,7 @@ export default function LoginPage() {
           <div className="lg:w-1/2 bg-gradient-to-br from-blue-600 via-blue-700 to-blue-800 p-8 lg:p-12 flex flex-col justify-center items-center text-white relative overflow-hidden">
             {/* Background Pattern */}
             <div className="absolute inset-0 opacity-10">
-              <div className="absolute top-0 left-0 w-full h-full "></div>
+              <div className="absolute top-0 left-0 w-full h-full"></div>
             </div>
             
             <div className="relative z-10 text-center">
