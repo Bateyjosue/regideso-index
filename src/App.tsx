@@ -16,9 +16,9 @@ import Agent from "./components/pages/agent/Agent"
 import { Level, Category } from "./components/pages/agent"
 import Subscriber from "./components/pages/subscriber/Subscriber"
 import { Category as SubscriberCategory } from "./components/pages/subscriber"
-import Analytics from "./components/pages/system/Analytics"
-import Reports from "./components/pages/system/Reports"
-import Settings from "./components/pages/system/Settings"
+import Analytics from "./components/pages/system/Analytics.tsx"
+import Reports from "./components/pages/system/Reports.tsx"
+import Settings from "./components/pages/system/Settings.tsx"
 import { ProtectedRoute } from "./components/auth/ProtectedRoute"
 
 const App: React.FC = () => {
