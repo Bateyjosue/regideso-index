@@ -17,13 +17,21 @@ export default function LoginPage() {
       return
     }
 
-    const { error } = await signIn(email, password)
-    
-    if (error) {
-      toast.error(error.message)
-    } else {
-      toast.success('Login successful!')
-      navigate('/')
+    try {
+      const { error } = await signIn(email, password)
+      
+      if (error) {
+        toast.error(error.message)
+      } else {
+        toast.success('Login successful!')
+        // Force navigation after a short delay to ensure state updates
+        setTimeout(() => {
+          navigate('/')
+        }, 100)
+      }
+    } catch (err) {
+      console.error('Login error:', err)
+      toast.error('An unexpected error occurred')
     }
   }
 
@@ -138,9 +146,9 @@ export default function LoginPage() {
                     <input type="checkbox" className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500" />
                     <span className="ml-2 text-sm text-gray-600">Remember me</span>
                   </label>
-                  <Link to="/forgot-password" className="text-sm text-blue-600 hover:text-blue-700 font-medium">
+                  <a href="#" className="text-sm text-blue-600 hover:text-blue-700 font-medium">
                     Forgot password?
-                  </Link>
+                  </a>
                 </div>
 
                 <button
