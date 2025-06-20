@@ -5,7 +5,7 @@ import toast from 'react-hot-toast'
 
 export default function LoginPage() {
   const [email, setEmail] = useState('admin@reg.com')
-  const [password, setPassword] = useState('')
+  const [password, setPassword] = useState('admin123')
   const { signIn, loading, error } = useAuth()
   const navigate = useNavigate()
 
@@ -95,7 +95,7 @@ export default function LoginPage() {
                   <br />
                   Email: admin@reg.com
                   <br />
-                  Password: (leave empty)
+                  Password: admin123
                 </p>
               </div>
 
