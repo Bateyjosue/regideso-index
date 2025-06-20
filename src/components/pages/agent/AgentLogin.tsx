@@ -38,7 +38,7 @@ const AgentLogin = () => {
       })
       
       if (error) {
-        console.log('Using mock login instead of Supabase auth')
+        console.log('Using mock login instead')
         
         // For demo purposes, accept any credentials
         localStorage.setItem('agent_logged_in', 'true')

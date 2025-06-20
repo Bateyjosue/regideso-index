@@ -36,71 +36,12 @@ export function useAuth() {
             error: null
           })
         } else {
-          // Check if we have a mock login
-          const mockLoggedIn = localStorage.getItem('mock_auth_logged_in') === 'true'
-          
-          if (mockLoggedIn) {
-            // Create a mock user
-            const mockUser: User = {
-              id: 'mock-user-id',
-              email: 'admin@regideso.com',
-              user_metadata: {
-                full_name: 'Admin User',
-                role: 'Admin'
-              },
-              app_metadata: {},
-              aud: 'authenticated',
-              created_at: new Date().toISOString(),
-              role: 'authenticated',
-              updated_at: new Date().toISOString(),
-              email_confirmed_at: new Date().toISOString(),
-              last_sign_in_at: new Date().toISOString(),
-              phone: '',
-              confirmation_sent_at: '',
-              confirmed_at: '',
-              email_change_sent_at: '',
-              new_email: '',
-              invited_at: '',
-              action_link: '',
-              email_change: '',
-              email_change_confirm_status: 0,
-              banned_until: '',
-              new_phone: '',
-              phone_change: '',
-              phone_change_token: '',
-              phone_change_sent_at: '',
-              phone_confirmed_at: '',
-              phone_change_confirm_status: 0,
-              recovery_sent_at: '',
-              new_email_change_sent_at: '',
-              email_change_token_new: '',
-              email_change_token_current: '',
-              is_anonymous: false
-            }
-            
-            const mockSession: Session = {
-              access_token: 'mock-access-token',
-              refresh_token: 'mock-refresh-token',
-              expires_in: 3600,
-              expires_at: Date.now() + 3600000,
-              token_type: 'bearer',
-              user: mockUser
-            }
-            
-            setAuthState({
-              user: mockUser,
-              session: mockSession,
-              loading: false,
-              error: null
-            })
-          } else {
-            setAuthState({
-              user: null,
-              session: null,
-              loading: false,
-              error: null
-            })
-          }
+          setAuthState({
+            user: null,
+            session: null,
+            loading: false,
+            error: null
+          })
         }
       } catch (error) {
         console.error('Error getting session:', error)
@@ -122,19 +63,12 @@ export function useAuth() {
             error: null
           })
         } else {
-          // Check if we have a mock login
-          const mockLoggedIn = localStorage.getItem('mock_auth_logged_in') === 'true'
-          
-          if (mockLoggedIn) {
-            // Keep the mock user logged in
-          } else {
-            setAuthState({
-              user: null,
-              session: null,
-              loading: false,
-              error: null
-            })
-          }
+          setAuthState({
+            user: null,
+            session: null,
+            loading: false,
+            error: null
+          })
         }
       }
     )
@@ -148,66 +82,21 @@ export function useAuth() {
     setAuthState(prev => ({ ...prev, loading: true, error: null }))
     
     try {
-      // For demo purposes, we'll use mock authentication
-      console.log('Using mock login instead of Supabase auth')
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email,
+        password
+      })
       
-      // Create a mock user
-      const mockUser: User = {
-        id: 'mock-user-id',
-        email: email,
-        user_metadata: {
-          full_name: 'Admin User',
-          role: 'Admin'
-        },
-        app_metadata: {},
-        aud: 'authenticated',
-        created_at: new Date().toISOString(),
-        role: 'authenticated',
-        updated_at: new Date().toISOString(),
-        email_confirmed_at: new Date().toISOString(),
-        last_sign_in_at: new Date().toISOString(),
-        phone: '',
-        confirmation_sent_at: '',
-        confirmed_at: '',
-        email_change_sent_at: '',
-        new_email: '',
-        invited_at: '',
-        action_link: '',
-        email_change: '',
-        email_change_confirm_status: 0,
-        banned_until: '',
-        new_phone: '',
-        phone_change: '',
-        phone_change_token: '',
-        phone_change_sent_at: '',
-        phone_confirmed_at: '',
-        phone_change_confirm_status: 0,
-        recovery_sent_at: '',
-        new_email_change_sent_at: '',
-        email_change_token_new: '',
-        email_change_token_current: '',
-        is_anonymous: false
-      }
-      
-      const mockSession: Session = {
-        access_token: 'mock-access-token',
-        refresh_token: 'mock-refresh-token',
-        expires_in: 3600,
-        expires_at: Date.now() + 3600000,
-        token_type: 'bearer',
-        user: mockUser
-      }
-      
-      localStorage.setItem('mock_auth_logged_in', 'true')
+      if (error) throw error
       
       setAuthState({
-        user: mockUser,
-        session: mockSession,
+        user: data.user,
+        session: data.session,
         loading: false,
         error: null
       })
       
-      return { data: { user: mockUser, session: mockSession }, error: null }
+      return { data, error: null }
     } catch (error) {
       console.error('Error signing in:', error)
       setAuthState(prev => ({ ...prev, loading: false, error: error as AuthError }))
@@ -219,8 +108,7 @@ export function useAuth() {
     setAuthState(prev => ({ ...prev, loading: true }))
     
     try {
-      // Clear any mock auth
-      localStorage.removeItem('mock_auth_logged_in')
+      // Clear any agent login states
       localStorage.removeItem('field_agent_logged_in')
       localStorage.removeItem('agent_logged_in')
       

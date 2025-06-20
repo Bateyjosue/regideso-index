@@ -31,19 +31,31 @@ const FieldAgentLogin = () => {
     setLoading(true)
     
     try {
-      // For demo purposes, we'll skip Supabase auth and use mock login directly
-      // This prevents the console error from appearing
-      console.log('Using mock login for field agent authentication')
+      // Try to authenticate with Supabase
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email: `${matricule}@regideso.com`, // Convert matricule to email format
+        password: password
+      })
       
-      // Simulate a brief loading delay for better UX
-      await new Promise(resolve => setTimeout(resolve, 1000))
+      if (error) {
+        console.log('Using mock login for field agent')
+        
+        // For demo purposes, accept any credentials
+        localStorage.setItem('field_agent_logged_in', 'true')
+        localStorage.setItem('field_agent_matricule', matricule)
+        
+        toast.success('Login successful!')
+        navigate('/field-agent-dashboard')
+        return
+      }
       
-      localStorage.setItem('field_agent_logged_in', 'true')
-      localStorage.setItem('field_agent_matricule', matricule)
-      
-      toast.success('Login successful!')
-      navigate('/field-agent-dashboard')
-      
+      if (data.user) {
+        localStorage.setItem('field_agent_logged_in', 'true')
+        localStorage.setItem('field_agent_matricule', matricule)
+        
+        toast.success('Login successful!')
+        navigate('/field-agent-dashboard')
+      }
     } catch (error) {
       console.error('Login error:', error)
       toast.error('Login failed. Please try again.')
@@ -83,6 +95,17 @@ const FieldAgentLogin = () => {
           </div>
           <h1 className="text-2xl font-bold text-gray-900 mb-2">Field Agent Login</h1>
           <p className="text-gray-600">Access your field operations dashboard</p>
+        </div>
+
+        {/* Demo Notice */}
+        <div className="mb-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+          <p className="text-blue-800 text-sm">
+            <strong>Demo Mode:</strong> Use the following credentials:
+            <br />
+            Matricule: FA001
+            <br />
+            Password: password123
+          </p>
         </div>
 
         {/* Login Form */}

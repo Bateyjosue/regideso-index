@@ -5,7 +5,7 @@ import toast from 'react-hot-toast'
 
 export default function LoginPage() {
   const [email, setEmail] = useState('admin@regideso.com')
-  const [password, setPassword] = useState('')
+  const [password, setPassword] = useState('password123')
   const { signIn, loading, error } = useAuth()
   const navigate = useNavigate()
 
@@ -91,8 +91,11 @@ export default function LoginPage() {
               {/* Demo Notice */}
               <div className="mb-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
                 <p className="text-blue-800 text-sm">
-                  <strong>Demo Mode:</strong> Use any email and password to login. 
-                  Default credentials are pre-filled for convenience.
+                  <strong>Demo Mode:</strong> Use the following credentials to login:
+                  <br />
+                  Email: admin@regideso.com
+                  <br />
+                  Password: password123
                 </p>
               </div>
 
