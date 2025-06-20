@@ -4,8 +4,8 @@ import { useAuth } from '../../../hooks/useAuth'
 import toast from 'react-hot-toast'
 
 export default function LoginPage() {
-  const [email, setEmail] = useState('admin@regideso.com')
-  const [password, setPassword] = useState('password123')
+  const [email, setEmail] = useState('admin@reg.com')
+  const [password, setPassword] = useState('')
   const { signIn, loading, error } = useAuth()
   const navigate = useNavigate()
 
@@ -93,9 +93,9 @@ export default function LoginPage() {
                 <p className="text-blue-800 text-sm">
                   <strong>Demo Mode:</strong> Use the following credentials to login:
                   <br />
-                  Email: admin@regideso.com
+                  Email: admin@reg.com
                   <br />
-                  Password: password123
+                  Password: (leave empty)
                 </p>
               </div>
 
