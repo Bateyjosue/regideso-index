@@ -7,6 +7,9 @@ import ratelimit from 'express-rate-limit';
 
 const app: Express = express();
 
+app.use(helmet());
+app.use(morgan('dev'));
+
 const limiter = ratelimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
   max: 100,
@@ -14,15 +17,14 @@ const limiter = ratelimit({
   standardHeaders: true,
   legacyHeaders: false,
 });
-
 app.use(limiter);
+
+app.use(cors());
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(cors());
-app.use(helmet());
-app.use(compression());
 
-app.use(morgan('dev'));
+app.use(compression());
 
 // routes
 app.get('/', (req, res) => {
