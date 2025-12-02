@@ -4,6 +4,8 @@ import helmet from 'helmet';
 import compression from 'compression';
 import morgan from 'morgan';
 import ratelimit from 'express-rate-limit';
+import swaggerUi from 'swagger-ui-express';
+import { swaggerSpec } from './swagger';
 
 const app: Express = express();
 
@@ -25,6 +27,8 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use(compression());
+
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 // routes
 app.get('/', (req, res) => {
