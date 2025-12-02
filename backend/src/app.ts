@@ -13,7 +13,7 @@ app.use(compression());
 
 // routes
 app.get('/', (req, res) => {
-  res.send('API is running');
+  res.send({ message: 'API is running' });
 });
 
 export default app;
